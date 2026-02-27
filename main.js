@@ -38,19 +38,19 @@ function renderApp() {
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
           
           <div class="card text-center" style="display: flex; flex-direction: column; align-items: center;">
-            <img src="/images/asset.png" alt="AI Feature" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 24px; drop-shadow: 0 10px 15px rgba(0,0,0,0.1);" />
+            <div style="font-size: 5rem; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; height: 120px;">📸</div>
             <h3 data-i18n="feat1_title"></h3>
             <p data-i18n="feat1_desc"></p>
           </div>
 
           <div class="card text-center" style="display: flex; flex-direction: column; align-items: center;">
-            <div style="font-size: 5rem; margin-bottom: 1rem; color: var(--secondary-color);">🗣️</div>
+            <div style="font-size: 5rem; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; height: 120px;">🗣️</div>
             <h3 data-i18n="feat2_title"></h3>
             <p data-i18n="feat2_desc"></p>
           </div>
 
           <div class="card text-center" style="display: flex; flex-direction: column; align-items: center;">
-            <img src="/images/gacha.png" alt="Gamification Feature" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 24px; drop-shadow: 0 10px 15px rgba(0,0,0,0.1);" />
+            <div style="font-size: 5rem; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; height: 120px;">🎁</div>
             <h3 data-i18n="feat3_title"></h3>
             <p data-i18n="feat3_desc"></p>
           </div>
