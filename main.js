@@ -65,7 +65,7 @@ function renderFrame() {
         <div class="footer-links">
           <a href="/privacy.html" data-i18n="footer_privacy"></a>
           <a href="/terms.html" data-i18n="footer_terms"></a>
-          <a href="mailto:support@acespeller.com.hk" data-i18n="footer_contact"></a>
+          <a href="mailto:cs@acespeller.com.hk" data-i18n="footer_contact"></a>
         </div>
       </div>
       <div class="footer-copy">
