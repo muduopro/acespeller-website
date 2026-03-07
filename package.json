@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "sync:legal": "mkdir -p public && cp ../dictation-helper/privacy_policy.md public/ && cp ../dictation-helper/terms_of_service.md public/",
+    "predev": "npm run sync:legal",
+    "prebuild": "npm run sync:legal",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"

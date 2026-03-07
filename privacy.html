@@ -94,7 +94,7 @@
             <script>
                 async function loadPolicy() {
                     try {
-                        const response = await fetch('https://raw.githubusercontent.com/muduopro/dictation-helper/main/privacy_policy.md');
+                        const response = await fetch('/privacy_policy.md');
                         if (!response.ok) throw new Error('Failed to fetch policy');
                         const text = await response.text();
                         
