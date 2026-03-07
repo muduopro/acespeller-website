@@ -135,8 +135,6 @@ function renderApp() {
                 src="/images/hero-visual.png"
                 class="hero-phone-img"
                 alt="AceSpeller App 畫面預覽"
-                width="300"
-                height="600"
                 loading="eager"
               />
             </div>

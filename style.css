@@ -501,7 +501,7 @@ img { max-width: 100%; display: block; }
 .hero-phone-wrapper {
   position: relative;
   width: 100%;
-  max-width: 300px;
+  max-width: 480px; /* 放寬從 300px 到 480px 以容納原本的比例 */
   margin: 0 auto;
 }
 .hero-phone-glow {
@@ -517,8 +517,10 @@ img { max-width: 100%; display: block; }
 }
 .hero-phone-img {
   width: 100%;
-  border-radius: 28px;
-  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.65), 0 0 50px rgba(255, 167, 38, 0.2);
+  height: auto; /* 確保保持原本比例 */
+  border-radius: 20px; /* 稍微減少圓角以匹配圖片正方形邊界 */
+  /* 取消原先針對狹長手機畫面的陰影，改為柔和的全域陰影 */
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 30px rgba(255, 167, 38, 0.15));
   animation: phoneBob 5s ease-in-out infinite;
 }
 @keyframes phoneBob {
@@ -848,7 +850,7 @@ details p {
 
 /* iPad 橫向 (769–1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .hero-phone-wrapper { max-width: 240px; }
+  .hero-phone-wrapper { max-width: 380px; }
 
   .features-grid,
   .testimonials-grid {
@@ -880,7 +882,7 @@ details p {
     gap: 28px;
   }
   .hero-visual { order: -1; }
-  .hero-phone-wrapper { max-width: 190px; }
+  .hero-phone-wrapper { max-width: 340px; } /* 放寬手機版的尺寸 */
   .hero-btns { justify-content: center; }
   .hero-stats { justify-content: center; gap: 20px; }
   .stat-item { text-align: center; }
