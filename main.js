@@ -132,7 +132,7 @@ function renderApp() {
             <div class="hero-phone-wrapper">
               <div class="hero-phone-glow"></div>
               <img
-                src="/images/shop.png"
+                src="/images/hero-visual.png"
                 class="hero-phone-img"
                 alt="AceSpeller App 畫面預覽"
                 width="300"
