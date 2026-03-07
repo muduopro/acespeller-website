@@ -18,7 +18,7 @@ function renderFrame() {
       <div class="nav-right">
         <nav class="nav-links">
           <a href="#features" data-i18n="nav_features"></a>
-          <a href="#testimonials" data-i18n="nav_testimonials"></a>
+          <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
         </nav>
         <select id="langSwitcher" aria-label="語言切換">
           <option value="zh-HK">繁體中文</option>
@@ -36,10 +36,9 @@ function renderFrame() {
       </button>
     </div>
 
-    <!-- 手機抽屜選單 -->
     <div class="mobile-menu" id="mobileMenu" role="navigation">
       <a href="#features" data-i18n="nav_features"></a>
-      <a href="#testimonials" data-i18n="nav_testimonials"></a>
+      <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
       <div class="mobile-lang-row">
         <span>🌐</span>
         <select id="langSwitcherMobile" aria-label="語言切換">
@@ -110,7 +109,8 @@ function renderApp() {
               </a>
             </div>
 
-            <!-- 數據指標 -->
+            <!-- 數據指標 (暫時隱藏以保持真實性) -->
+            <!--
             <div class="hero-stats">
               <div class="stat-item">
                 <div class="stat-number">4.9 ★</div>
@@ -125,6 +125,7 @@ function renderApp() {
                 <div class="stat-label" data-i18n="stat_free"></div>
               </div>
             </div>
+            -->
           </div>
 
           <!-- 右側手機視覺 -->
@@ -203,7 +204,8 @@ function renderApp() {
       </div>
     </section>
 
-    <!-- ===== TESTIMONIALS ===== -->
+    <!-- ===== TESTIMONIALS (暫時隱藏) ===== -->
+    <!--
     <section id="testimonials" class="testimonials-section section" aria-label="用戶評價">
       <div class="container">
         <div class="text-center">
@@ -234,6 +236,7 @@ function renderApp() {
         </div>
       </div>
     </section>
+    -->
 
     <!-- ===== FAQ ===== -->
     <section class="faq-section section" aria-label="常見問題">
