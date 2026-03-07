@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "sync:legal": "mkdir -p public && cp ../dictation-helper/privacy_policy.md public/ && cp ../dictation-helper/terms_of_service.md public/",
+    "sync:legal": "mkdir -p public && cp ../dictation-helper/privacy_policy.md public/ 2>/dev/null || true && cp ../dictation-helper/terms_of_service.md public/ 2>/dev/null || true",
     "predev": "npm run sync:legal",
     "prebuild": "npm run sync:legal",
     "dev": "vite",
