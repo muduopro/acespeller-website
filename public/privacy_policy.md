@@ -1,6 +1,6 @@
 # Privacy Policy (隱私政策)
 
-**Effective Date (生效日期):** 2026-03-07
+**Effective Date (生效日期):** 2026-03-08
 
 **MuduoPro Limited** ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal data in compliance with the **Personal Data (Privacy) Ordinance (Cap. 486)** of the Laws of Hong Kong ("PDPO").
 
@@ -81,13 +81,13 @@ To submit a data access or correction request, please contact our Data Protectio
 
 ## 6. Children's Privacy
 
-**Age Restriction — This App Is For Users Aged 13 and Above Only:**
-AceSpeller is designed for secondary school students, adult learners, and educational practitioners aged **13 and above**. **THIS APP IS NOT INTENDED FOR USE BY CHILDREN UNDER THE AGE OF 13. Children under 13 are NOT permitted to create an account or use this App.** By creating an account, you confirm that you are at least 13 years of age, as verified by the mandatory in-app age confirmation.
+**Age Restriction — This App Is For Users Aged 18 and Above Only:**
+AceSpeller is designed for adult learners, parents, guardians, and educational practitioners aged **18 and above**. **THIS APP IS NOT INTENDED FOR USE BY PERSONS UNDER THE AGE OF 18. Persons under 18 are NOT permitted to create an account or use this App.** By creating an account, you confirm that you are at least 18 years of age, as verified by the mandatory in-app age confirmation.
 
-If we discover or are notified that a user under the age of 13 has provided personal data, we will promptly delete all such data. Parents or guardians who believe their child has created an account without authorisation should contact us immediately at **cs@acespeller.com.hk**. We will delete the relevant data within **14 business days**.
+If we discover or are notified that a user under the age of 18 has provided personal data, we will promptly delete all such data. Parents or guardians who believe their child has created an account without authorisation should contact us immediately at **cs@acespeller.com.hk**. We will delete the relevant data within **14 business days**.
 
 **Special Safeguards for Minors' Data:**
-*   We do not knowingly collect personal data from children under the age of 13.
+*   We do not knowingly collect personal data from persons under the age of 18.
 *   Our advertising service will disable behavioural targeted advertising for any user identified as a minor.
 
 ## 7. Changes to This Policy
@@ -177,13 +177,13 @@ We may update this Privacy Policy from time to time. We will notify you of any s
 
 ## 6. 兒童隱私
 
-**年齡限制——本 App 僅適用於 13 歲或以上之用戶：**
-AceSpeller 專為 **13 歲或以上**的學生、成人學習者及教育工作者設計。**本 App 不開放予 13 歲以下兒童使用。13 歲以下人士不得創建帳號或使用本 App。** 創建帳號即表示您確認已年滿 13 歲，此年齡要求已透過 App 內的強制年齡確認機制驗證。
+**年齡限制——本 App 僅適用於 18 歲或以上之用戶：**
+AceSpeller 專為 **18 歲或以上**的成人學習者、家長、監護人及教育工作者設計。**本 App 不開放予 18 歲以下人士使用。18 歲以下人士不得創建帳號或使用本 App。** 創建帳號即表示您確認已年滿 18 歲，此年齡要求已透過 App 內的強制年齡確認機制驗證。
 
-若我們發現或獲悉 13 歲以下用戶在未獲授權的情況下提供了個人資料，我們將即時刪除所有相關資料。若家長或監護人發現其子女在未獲授權的情況下創建了帳號，請立即聯繫我們（**cs@acespeller.com.hk**），我們將在 **14 個工作天**內刪除相關資料。
+若我們發現或獲悉 18 歲以下用戶在未獲授權的情況下提供了個人資料，我們將即時刪除所有相關資料。若家長或監護人發現其子女在未獲授權的情況下創建了帳號，請立即聯繫我們（**cs@acespeller.com.hk**），我們將在 **14 個工作天**內刪除相關資料。
 
 **未成年人資料的特別保護措施：**
-*   我們不會刻意向 13 歲以下兒童收集個人資料。
+*   我們不會刻意向 18 歲以下人士收集個人資料。
 *   我們的廣告服務將針對已識別的未成年用戶停用行為定向廣告。
 
 ## 7. 政策變更
