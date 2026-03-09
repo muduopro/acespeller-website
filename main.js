@@ -68,7 +68,7 @@ function renderFrame() {
         </div>
       </div>
       <div class="footer-copy">
-        &copy; 2026 MuduoPro Limited. All rights reserved. AceSpeller and its characters are trademarks of Muduopro, registered in Hong Kong.
+        ©️ 2026 MuduoPro Limited. All rights reserved. AceSpeller and its characters are trademarks of Muduopro, registered in Hong Kong.
       </div>
     </div>
   `;

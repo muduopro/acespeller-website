@@ -86,10 +86,11 @@
 
     <main class="container" style="padding-bottom: 80px;">
         <div class="legal-content">
-            <div id="content-container" style="min-height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-main);">
+            <div id="content-container"
+                style="min-height: 400px; display: flex; align-items: center; justify-content: center; color: var(--text-main);">
                 正在從伺服器載入最新條款 (Loading latest policy)...
             </div>
-            
+
             <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
             <script>
                 async function loadPolicy() {
@@ -97,13 +98,13 @@
                         const response = await fetch('/terms_of_service.md');
                         if (!response.ok) throw new Error('Failed to fetch policy');
                         const text = await response.text();
-                        
+
                         // Configure marked to use standard styling
                         marked.setOptions({
                             breaks: true,
                             gfm: true
                         });
-                        
+
                         document.getElementById('content-container').innerHTML = marked.parse(text);
                         document.getElementById('content-container').style.display = 'block';
                     } catch (error) {
@@ -115,7 +116,11 @@
             </script>
         </div>
     </main>
-
+    <footer
+        style="text-align: center; padding: 20px; font-size: 14px; color: #718096; border-top: 1px solid var(--bg-color);">
+        ©️ 2026 MuduoPro Limited. All rights reserved. AceSpeller and its characters are trademarks of Muduopro,
+        registered in Hong Kong.
+    </footer>
 </body>
 
 </html>
