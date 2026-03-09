@@ -68,7 +68,7 @@ function renderFrame() {
         </div>
       </div>
       <div class="footer-copy">
-        &copy; ${new Date().getFullYear()} AceSpeller. All rights reserved.
+        &copy; 2026 MuduoPro Limited. All rights reserved. AceSpeller and its characters are trademarks of Muduopro, registered in Hong Kong.
       </div>
     </div>
   `;
