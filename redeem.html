@@ -201,6 +201,51 @@
 
     .result-banner.show { display: block; }
 
+    /* Sign in with Apple Button */
+    .btn-apple {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 20px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-apple:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-apple:active { transform: translateY(0); }
+    .btn-apple svg { flex-shrink: 0; }
+
+    /* Or Divider */
+    .signin-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .signin-divider::before,
+    .signin-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--glass-border);
+    }
+
     /* Lang Switcher */
     .lang-switcher {
       display: flex;
@@ -308,7 +353,7 @@
       <h1 class="redeem-title" id="page-title">兌換碼</h1>
       <p class="redeem-subtitle" id="page-subtitle">使用您的 Google 帳號登入，<br>然後輸入兌換碼即可升級帳號或獲得 AceCoins。</p>
 
-      <!-- 未登入：顯示 Google Sign-In -->
+      <!-- 未登入：顯示 Google + Apple Sign-In -->
       <div id="section-signin">
         <button class="btn-google" id="btn-google-signin">
           <svg width="20" height="20" viewBox="0 0 20 20">
@@ -318,6 +363,15 @@
             <path d="M10 3.97c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.9 12.7 0 10 0A10 10 0 001.06 5.51l3.35 2.58C5.2 5.72 7.4 3.97 10 3.97z" fill="#EA4335"/>
           </svg>
           <span id="btn-google-text">以 Google 帳號登入</span>
+        </button>
+
+        <div class="signin-divider"><span id="signin-or">或</span></div>
+
+        <button class="btn-apple" id="btn-apple-signin">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          <span id="btn-apple-text">以 Apple ID 登入</span>
         </button>
       </div>
 

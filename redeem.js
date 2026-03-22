@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   GoogleAuthProvider,
+  OAuthProvider,
   signInWithPopup,
   signOut,
   onAuthStateChanged,
@@ -24,14 +25,21 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Apple OAuth Provider
+const appleProvider = new OAuthProvider('apple.com');
+appleProvider.addScope('email');
+appleProvider.addScope('name');
+
 // ─────────────────────────────────────────
 // 多語系字串
 // ─────────────────────────────────────────
 const i18n = {
   'zh-HK': {
     pageTitle: '兌換碼',
-    pageSubtitle: '使用您的 Google 帳號登入，<br>然後輸入兌換碼即可升級帳號或獲得 AceCoins。',
+    pageSubtitle: '登入後輸入兌換碼，即可升級帳號或獲得 AceCoins。',
     signinBtn: '以 Google 帳號登入',
+    appleSigninBtn: '以 Apple ID 登入',
+    signinOr: '或',
     signoutBtn: '登出',
     inputPlaceholder: '輸入兌換碼',
     submitBtn: '立即兌換',
@@ -50,8 +58,10 @@ const i18n = {
   },
   'zh-CN': {
     pageTitle: '兑换码',
-    pageSubtitle: '使用您的 Google 账号登录，<br>然后输入兑换码即可升级账号或获得 AceCoins。',
+    pageSubtitle: '登录后输入兑换码，即可升级账号或获得 AceCoins。',
     signinBtn: '以 Google 账号登录',
+    appleSigninBtn: '以 Apple ID 登录',
+    signinOr: '或',
     signoutBtn: '登出',
     inputPlaceholder: '输入兑换码',
     submitBtn: '立即兑换',
@@ -70,8 +80,10 @@ const i18n = {
   },
   'en-US': {
     pageTitle: 'Redeem Code',
-    pageSubtitle: 'Sign in with your Google account,<br>then enter your code to upgrade or earn AceCoins.',
+    pageSubtitle: 'Sign in to redeem your code and upgrade your account or earn AceCoins.',
     signinBtn: 'Sign in with Google',
+    appleSigninBtn: 'Sign in with Apple',
+    signinOr: 'or',
     signoutBtn: 'Sign out',
     inputPlaceholder: 'Enter redeem code',
     submitBtn: 'Redeem',
@@ -103,6 +115,9 @@ const sectionSignin = document.getElementById('section-signin');
 const sectionRedeem = document.getElementById('section-redeem');
 const btnGoogleSignin = document.getElementById('btn-google-signin');
 const btnGoogleText = document.getElementById('btn-google-text');
+const btnAppleSignin = document.getElementById('btn-apple-signin');
+const btnAppleText = document.getElementById('btn-apple-text');
+const signinOrText = document.getElementById('signin-or');
 const btnSignout = document.getElementById('btn-signout');
 const userAvatar = document.getElementById('user-avatar');
 const userName = document.getElementById('user-name');
@@ -124,6 +139,8 @@ function applyLang(lang) {
   pageTitle.textContent = t.pageTitle;
   pageSubtitle.innerHTML = t.pageSubtitle;
   btnGoogleText.textContent = t.signinBtn;
+  btnAppleText.textContent = t.appleSigninBtn;
+  signinOrText.textContent = t.signinOr;
   btnSignout.textContent = t.signoutBtn;
   codeInput.placeholder = t.inputPlaceholder;
   btnSubmitText.textContent = t.submitBtn;
@@ -156,11 +173,21 @@ onAuthStateChanged(auth, (user) => {
 // Google 登入 / 登出
 // ─────────────────────────────────────────
 btnGoogleSignin.addEventListener('click', async () => {
-  const provider = new GoogleAuthProvider();
   try {
-    await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, new GoogleAuthProvider());
   } catch (e) {
-    console.error('Sign-in error:', e);
+    console.error('Google sign-in error:', e);
+  }
+});
+
+btnAppleSignin.addEventListener('click', async () => {
+  try {
+    await signInWithPopup(auth, appleProvider);
+  } catch (e) {
+    // 用戶手動取消不需要顯示錯誤
+    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+      console.error('Apple sign-in error:', e);
+    }
   }
 });
 
