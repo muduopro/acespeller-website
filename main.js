@@ -19,6 +19,7 @@ function renderFrame() {
         <nav class="nav-links">
           <a href="#features" data-i18n="nav_features"></a>
           <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
+          <a href="/redeem.html" data-i18n="nav_redeem"></a>
         </nav>
         <select id="langSwitcher" aria-label="語言切換">
           <option value="zh-HK">繁體中文</option>
@@ -39,6 +40,7 @@ function renderFrame() {
     <div class="mobile-menu" id="mobileMenu" role="navigation">
       <a href="#features" data-i18n="nav_features"></a>
       <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
+      <a href="/redeem.html" data-i18n="nav_redeem"></a>
       <div class="mobile-lang-row">
         <span>🌐</span>
         <select id="langSwitcherMobile" aria-label="語言切換">
