@@ -4,7 +4,7 @@
 //    若尚未建立網頁 App：點「新增應用程式」→ 選「網頁 (</>)」→ 取得設定
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyBmMh1ZoxYWtYdnjqdW-fNYqrQ-6Q61s_w",
+  apiKey: "AIzaSyByko7MLl_MH3Oy5GFp7iVNnWvqIFvZKFQ",
   authDomain: "muduopro-dictation-659c2.firebaseapp.com",
   projectId: "muduopro-dictation-659c2",
   storageBucket: "muduopro-dictation-659c2.firebasestorage.app",
