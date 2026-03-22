@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "muduopro-dictation-659c2",
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

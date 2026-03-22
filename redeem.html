@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="zh-HK">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>兌換碼 - AceSpeller 默書100分</title>
+  <meta name="description" content="在這裡兌換您的 AceSpeller 促銷碼，升級訂閱或獲得 AceCoins 獎勵。" />
+  <meta name="robots" content="noindex" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="stylesheet" href="/style.css" />
+
+  <style>
+    .redeem-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .redeem-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(16px);
+      text-align: center;
+    }
+
+    .redeem-logo {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px;
+      display: block;
+    }
+
+    .redeem-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+
+    .redeem-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    /* Google Sign-In Button */
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 20px;
+      background: #fff;
+      color: #3c4043;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-google:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-google:active { transform: translateY(0); }
+
+    .btn-google svg { flex-shrink: 0; }
+
+    /* User Info Bar */
+    .user-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      padding: 10px 16px;
+      margin-bottom: 24px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .user-name {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      flex: 1;
+      text-align: left;
+    }
+
+    .btn-signout {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s;
+    }
+
+    .btn-signout:hover { color: var(--coral); }
+
+    /* Redeem Form */
+    .redeem-form { display: flex; flex-direction: column; gap: 12px; }
+
+    .redeem-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-white);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: inherit;
+      text-align: center;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .redeem-input::placeholder {
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: none;
+      font-weight: 400;
+    }
+
+    .redeem-input:focus { border-color: var(--gold); }
+
+    .btn-redeem {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: #1a0533;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn-redeem:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
+    .btn-redeem:active:not(:disabled) { transform: translateY(0); }
+    .btn-redeem:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Result Banners */
+    .result-banner {
+      display: none;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .result-banner.success {
+      background: rgba(78, 205, 196, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+
+    .result-banner.error {
+      background: rgba(255, 107, 107, 0.12);
+      border: 1px solid var(--coral);
+      color: var(--coral-light);
+    }
+
+    .result-banner.show { display: block; }
+
+    /* Lang Switcher */
+    .lang-switcher {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .lang-btn {
+      background: none;
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active, .lang-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(26,5,51,0.4);
+      border-top-color: #1a0533;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+
+<body>
+  <div class="redeem-page">
+    <div class="redeem-card">
+      <img src="/logo.png" alt="AceSpeller" class="redeem-logo" />
+      <h1 class="redeem-title" id="page-title">兌換碼</h1>
+      <p class="redeem-subtitle" id="page-subtitle">使用您的 Google 帳號登入，<br>然後輸入兌換碼即可升級帳號或獲得 AceCoins。</p>
+
+      <!-- 未登入：顯示 Google Sign-In -->
+      <div id="section-signin">
+        <button class="btn-google" id="btn-google-signin">
+          <svg width="20" height="20" viewBox="0 0 20 20">
+            <path d="M19.6 10.23c0-.68-.06-1.36-.18-2H10v3.77h5.4a4.6 4.6 0 01-2 3.02v2.5h3.24c1.9-1.75 3-4.33 3-7.3z" fill="#4285F4"/>
+            <path d="M10 20c2.7 0 4.97-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.96-3.38.96-2.6 0-4.8-1.75-5.59-4.11H1.06v2.58A10 10 0 0010 20z" fill="#34A853"/>
+            <path d="M4.41 11.91A6.01 6.01 0 014.1 10c0-.67.12-1.32.31-1.91V5.51H1.06A10 10 0 000 10c0 1.61.38 3.13 1.06 4.49l3.35-2.58z" fill="#FBBC05"/>
+            <path d="M10 3.97c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.9 12.7 0 10 0A10 10 0 001.06 5.51l3.35 2.58C5.2 5.72 7.4 3.97 10 3.97z" fill="#EA4335"/>
+          </svg>
+          <span id="btn-google-text">以 Google 帳號登入</span>
+        </button>
+      </div>
+
+      <!-- 已登入：顯示用戶資訊 + 兌換表單 -->
+      <div id="section-redeem" style="display:none;">
+        <!-- 用戶資訊列 -->
+        <div class="user-bar">
+          <img id="user-avatar" class="user-avatar" src="" alt="" />
+          <span id="user-name" class="user-name"></span>
+          <button class="btn-signout" id="btn-signout">登出</button>
+        </div>
+
+        <!-- 兌換表單 -->
+        <form class="redeem-form" id="redeem-form" autocomplete="off">
+          <input
+            class="redeem-input"
+            type="text"
+            id="code-input"
+            placeholder="輸入兌換碼"
+            maxlength="32"
+            spellcheck="false"
+          />
+          <div id="result-banner" class="result-banner"></div>
+          <button class="btn-redeem" type="submit" id="btn-submit">
+            <span id="btn-submit-text">立即兌換</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- 語言切換 -->
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="zh-HK">繁中</button>
+        <button class="lang-btn" data-lang="zh-CN">简中</button>
+        <button class="lang-btn" data-lang="en-US">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/redeem.js"></script>
+</body>
+
+</html>

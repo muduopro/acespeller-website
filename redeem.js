@@ -1,0 +1,352 @@
+import { initializeApp } from 'firebase/app';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+} from 'firebase/auth';
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  runTransaction,
+  increment,
+  arrayUnion,
+  serverTimestamp,
+} from 'firebase/firestore';
+import { firebaseConfig } from './firebaseConfig.js';
+
+// ─────────────────────────────────────────
+// Firebase 初始化
+// ─────────────────────────────────────────
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ─────────────────────────────────────────
+// 多語系字串
+// ─────────────────────────────────────────
+const i18n = {
+  'zh-HK': {
+    pageTitle: '兌換碼',
+    pageSubtitle: '使用您的 Google 帳號登入，<br>然後輸入兌換碼即可升級帳號或獲得 AceCoins。',
+    signinBtn: '以 Google 帳號登入',
+    signoutBtn: '登出',
+    inputPlaceholder: '輸入兌換碼',
+    submitBtn: '立即兌換',
+    submitting: '兌換中...',
+    successTier: (tier, days) => `🎉 兌換成功！您的帳號已升級為 ${tier}，有效期 ${days} 天。重開 AceSpeller App 即可生效。`,
+    successCoins: (coins) => `🎉 兌換成功！獲得 ${coins} 🪙 AceCoins，請重開 App 查看最新餘額。`,
+    errNotFound: '無效的兌換碼，請確認後再試。',
+    errExpired: '此兌換碼已過期。',
+    errLimitReached: '此兌換碼已達使用上限。',
+    errAlreadyRedeemed: '你已兌換過此序號了。',
+    errDowngrade: '此兌換碼的等級低於您目前的方案，無法兌換。',
+    errGeneric: '兌換失敗，請稍後再試。',
+    errLoginRequired: '請先登入才能兌換。',
+    errEmptyCode: '請輸入兌換碼。',
+    tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+  },
+  'zh-CN': {
+    pageTitle: '兑换码',
+    pageSubtitle: '使用您的 Google 账号登录，<br>然后输入兑换码即可升级账号或获得 AceCoins。',
+    signinBtn: '以 Google 账号登录',
+    signoutBtn: '登出',
+    inputPlaceholder: '输入兑换码',
+    submitBtn: '立即兑换',
+    submitting: '兑换中...',
+    successTier: (tier, days) => `🎉 兑换成功！您的账号已升级为 ${tier}，有效期 ${days} 天。重启 AceSpeller App 即可生效。`,
+    successCoins: (coins) => `🎉 兑换成功！获得 ${coins} 🪙 AceCoins，请重启 App 查看最新余额。`,
+    errNotFound: '无效的兑换码，请确认后再试。',
+    errExpired: '此兑换码已过期。',
+    errLimitReached: '此兑换码已达使用上限。',
+    errAlreadyRedeemed: '你已兑换过此序号了。',
+    errDowngrade: '此兑换码的等级低于您目前的方案，无法兑换。',
+    errGeneric: '兑换失败，请稍后再试。',
+    errLoginRequired: '请先登录才能兑换。',
+    errEmptyCode: '请输入兑换码。',
+    tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+  },
+  'en-US': {
+    pageTitle: 'Redeem Code',
+    pageSubtitle: 'Sign in with your Google account,<br>then enter your code to upgrade or earn AceCoins.',
+    signinBtn: 'Sign in with Google',
+    signoutBtn: 'Sign out',
+    inputPlaceholder: 'Enter redeem code',
+    submitBtn: 'Redeem',
+    submitting: 'Redeeming...',
+    successTier: (tier, days) => `🎉 Success! Your account has been upgraded to ${tier} for ${days} days. Reopen AceSpeller to apply.`,
+    successCoins: (coins) => `🎉 Success! You earned ${coins} 🪙 AceCoins. Reopen the app to see your balance.`,
+    errNotFound: 'Invalid code. Please check and try again.',
+    errExpired: 'This code has expired.',
+    errLimitReached: 'This code has reached its usage limit.',
+    errAlreadyRedeemed: 'You have already redeemed this code.',
+    errDowngrade: 'This code is a lower tier than your current plan.',
+    errGeneric: 'Redemption failed. Please try again later.',
+    errLoginRequired: 'Please sign in before redeeming.',
+    errEmptyCode: 'Please enter a code.',
+    tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+  },
+};
+
+// ─────────────────────────────────────────
+// 狀態
+// ─────────────────────────────────────────
+let currentLang = 'zh-HK';
+let currentUser = null;
+
+// ─────────────────────────────────────────
+// DOM 取得
+// ─────────────────────────────────────────
+const sectionSignin = document.getElementById('section-signin');
+const sectionRedeem = document.getElementById('section-redeem');
+const btnGoogleSignin = document.getElementById('btn-google-signin');
+const btnGoogleText = document.getElementById('btn-google-text');
+const btnSignout = document.getElementById('btn-signout');
+const userAvatar = document.getElementById('user-avatar');
+const userName = document.getElementById('user-name');
+const codeInput = document.getElementById('code-input');
+const redeemForm = document.getElementById('redeem-form');
+const resultBanner = document.getElementById('result-banner');
+const btnSubmit = document.getElementById('btn-submit');
+const btnSubmitText = document.getElementById('btn-submit-text');
+const pageTitle = document.getElementById('page-title');
+const pageSubtitle = document.getElementById('page-subtitle');
+const langBtns = document.querySelectorAll('.lang-btn');
+
+// ─────────────────────────────────────────
+// 語言切換
+// ─────────────────────────────────────────
+function applyLang(lang) {
+  currentLang = lang;
+  const t = i18n[lang];
+  pageTitle.textContent = t.pageTitle;
+  pageSubtitle.innerHTML = t.pageSubtitle;
+  btnGoogleText.textContent = t.signinBtn;
+  btnSignout.textContent = t.signoutBtn;
+  codeInput.placeholder = t.inputPlaceholder;
+  btnSubmitText.textContent = t.submitBtn;
+  document.documentElement.lang = lang;
+  langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  hideResult();
+}
+
+langBtns.forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang)));
+
+// ─────────────────────────────────────────
+// Auth 狀態監聽
+// ─────────────────────────────────────────
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (user) {
+    sectionSignin.style.display = 'none';
+    sectionRedeem.style.display = 'block';
+    userAvatar.src = user.photoURL || '';
+    userAvatar.alt = user.displayName || '';
+    userName.textContent = user.displayName || user.email || user.uid;
+  } else {
+    sectionSignin.style.display = 'block';
+    sectionRedeem.style.display = 'none';
+  }
+  hideResult();
+});
+
+// ─────────────────────────────────────────
+// Google 登入 / 登出
+// ─────────────────────────────────────────
+btnGoogleSignin.addEventListener('click', async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (e) {
+    console.error('Sign-in error:', e);
+  }
+});
+
+btnSignout.addEventListener('click', () => signOut(auth));
+
+// ─────────────────────────────────────────
+// 兌換碼邏輯
+// ─────────────────────────────────────────
+
+/** 訂閱方案兌換碼（無 coins 欄位）— 對應 RedemptionService.dart */
+async function redeemSubscriptionCode(userId, codeId) {
+  const tierValue = { free: 0, ace_plus: 1, ace_pro: 2 };
+  const codeRef = doc(db, 'redeem_codes', codeId);
+  const userRef = doc(db, 'users', userId);
+
+  return await runTransaction(db, async (tx) => {
+    const codeSnap = await tx.get(codeRef);
+    if (!codeSnap.exists()) return { result: 'not_found' };
+
+    const data = codeSnap.data();
+    if (!data.active) return { result: 'not_found' };
+
+    if (data.expiryDate && data.expiryDate.toDate() < new Date()) return { result: 'expired' };
+    const maxUses = data.maxUses ?? 0;
+    const usedCount = data.usedCount ?? 0;
+    if (maxUses > 0 && usedCount >= maxUses) return { result: 'limit_reached' };
+    if ((data.redeemedBy ?? []).includes(userId)) return { result: 'already_redeemed' };
+
+    const tier = data.tier ?? 'ace_plus';
+    const durationDays = data.durationDays ?? 30;
+
+    // 防降級檢查
+    const userSnap = await tx.get(userRef);
+    if (userSnap.exists()) {
+      const ud = userSnap.data();
+      const currentExpiry = ud.subscriptionExpiry?.toDate?.();
+      const isExpired = !currentExpiry || new Date() > currentExpiry;
+      if (!isExpired) {
+        const currentVal = tierValue[ud.subscriptionTier] ?? 0;
+        const codeVal = tierValue[tier] ?? 0;
+        if (codeVal < currentVal) return { result: 'downgrade' };
+      }
+    }
+
+    const newExpiry = new Date();
+    newExpiry.setDate(newExpiry.getDate() + durationDays);
+
+    tx.set(userRef, {
+      subscriptionTier: tier,
+      subscriptionSource: 'redemption',
+      subscriptionExpiry: newExpiry,
+      redemptionCodeUsed: codeId,
+      lastUpdated: serverTimestamp(),
+    }, { merge: true });
+
+    tx.update(codeRef, {
+      usedCount: increment(1),
+      redeemedBy: arrayUnion(userId),
+    });
+
+    return { result: 'success', tier, durationDays };
+  });
+}
+
+/** AceCoins 兌換碼（有 coins 欄位）— 對應 GamificationService.claimRedeemCode() */
+async function claimCoinsCode(userId, codeId) {
+  const codeRef = doc(db, 'redeem_codes', codeId);
+  const statsRef = doc(db, 'users', userId, 'stats', 'general');
+
+  let coinsEarned = 0;
+
+  await runTransaction(db, async (tx) => {
+    const codeDoc = await tx.get(codeRef);
+    if (!codeDoc.exists()) throw new Error('not_found');
+
+    const data = codeDoc.data();
+    const expiresAt = data.expiresAt?.toDate?.();
+    const maxUses = data.maxUses ?? null;
+    const usedCount = data.usedCount ?? 0;
+    const redeemedBy = data.redeemedBy ?? [];
+
+    if (expiresAt && expiresAt < new Date()) throw new Error('expired');
+    if (maxUses !== null && usedCount >= maxUses) throw new Error('limit_reached');
+    if (redeemedBy.includes(userId)) throw new Error('already_claimed');
+
+    coinsEarned = data.coins ?? 0;
+
+    tx.update(codeRef, {
+      usedCount: usedCount + 1,
+      redeemedBy: [...redeemedBy, userId],
+    });
+
+    const statsDoc = await tx.get(statsRef);
+    if (statsDoc.exists()) {
+      tx.update(statsRef, { aceCoins: increment(coinsEarned) });
+    } else {
+      tx.set(statsRef, { aceCoins: coinsEarned });
+    }
+  });
+
+  return coinsEarned;
+}
+
+// ─────────────────────────────────────────
+// UI 輔助
+// ─────────────────────────────────────────
+function showResult(type, message) {
+  resultBanner.className = `result-banner ${type} show`;
+  resultBanner.textContent = message;
+}
+
+function hideResult() {
+  resultBanner.className = 'result-banner';
+  resultBanner.textContent = '';
+}
+
+function setLoading(loading) {
+  btnSubmit.disabled = loading;
+  btnSubmitText.innerHTML = loading
+    ? `<span class="spinner"></span>${i18n[currentLang].submitting}`
+    : i18n[currentLang].submitBtn;
+}
+
+// ─────────────────────────────────────────
+// 表單提交
+// ─────────────────────────────────────────
+redeemForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  hideResult();
+
+  const t = i18n[currentLang];
+
+  if (!currentUser) { showResult('error', t.errLoginRequired); return; }
+
+  const rawCode = codeInput.value.trim().toUpperCase();
+  if (!rawCode) { showResult('error', t.errEmptyCode); return; }
+
+  setLoading(true);
+
+  try {
+    // 先讀一次 code doc 判斷類型（有無 coins 欄位）
+    const codeSnap = await getDoc(doc(db, 'redeem_codes', rawCode));
+
+    if (!codeSnap.exists()) {
+      showResult('error', t.errNotFound);
+      return;
+    }
+
+    const isCoinsCode = codeSnap.data().coins !== undefined;
+
+    if (isCoinsCode) {
+      // AceCoins 兌換碼
+      const coins = await claimCoinsCode(currentUser.uid, rawCode);
+      showResult('success', t.successCoins(coins));
+      codeInput.value = '';
+    } else {
+      // 訂閱方案兌換碼
+      const res = await redeemSubscriptionCode(currentUser.uid, rawCode);
+      switch (res.result) {
+        case 'success': {
+          const tierName = t.tierNames[res.tier] ?? res.tier;
+          showResult('success', t.successTier(tierName, res.durationDays));
+          codeInput.value = '';
+          break;
+        }
+        case 'not_found':      showResult('error', t.errNotFound); break;
+        case 'expired':        showResult('error', t.errExpired); break;
+        case 'limit_reached':  showResult('error', t.errLimitReached); break;
+        case 'already_redeemed': showResult('error', t.errAlreadyRedeemed); break;
+        case 'downgrade':      showResult('error', t.errDowngrade); break;
+        default:               showResult('error', t.errGeneric);
+      }
+    }
+  } catch (err) {
+    console.error('Redeem error:', err);
+    const msg = err.message;
+    const t = i18n[currentLang];
+    if (msg === 'not_found')       showResult('error', t.errNotFound);
+    else if (msg === 'expired')    showResult('error', t.errExpired);
+    else if (msg === 'limit_reached') showResult('error', t.errLimitReached);
+    else if (msg === 'already_claimed') showResult('error', t.errAlreadyRedeemed);
+    else                           showResult('error', t.errGeneric);
+  } finally {
+    setLoading(false);
+  }
+});
+
+// 初始化語言
+applyLang(currentLang);
