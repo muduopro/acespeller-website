@@ -103,7 +103,7 @@ function renderApp() {
                 </svg>
                 <span data-i18n="btn_ios"></span>
               </a>
-              <a href="#" class="btn btn-outline">
+              <a href="https://play.google.com/store/apps/details?id=com.muduopro.dictationHelper" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
                   <path d="M3.18 23.76c.3.17.64.2.96.1l12.82-7.4-2.82-2.82-10.96 10.12zm-1.06-20.3C2.06 3.73 2 4.01 2 4.32v15.36c0 .31.06.59.12.86l11.37-11.36L2.12 3.46zM20.1 10.24l-2.72-1.57-3.16 3.16 3.16 3.16 2.76-1.59c.79-.45.79-1.71-.04-2.16zM4.14.24c-.32-.1-.67-.07-.96.1L14.45 11.5l2.82-2.82L4.14.24z"/>
                 </svg>
@@ -279,7 +279,7 @@ function renderApp() {
             </svg>
             <span data-i18n="btn_ios"></span>
           </a>
-          <a href="#" class="btn btn-outline">
+          <a href="https://play.google.com/store/apps/details?id=com.muduopro.dictationHelper" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
               <path d="M3.18 23.76c.3.17.64.2.96.1l12.82-7.4-2.82-2.82-10.96 10.12zm-1.06-20.3C2.06 3.73 2 4.01 2 4.32v15.36c0 .31.06.59.12.86l11.37-11.36L2.12 3.46zM20.1 10.24l-2.72-1.57-3.16 3.16 3.16 3.16 2.76-1.59c.79-.45.79-1.71-.04-2.16zM4.14.24c-.32-.1-.67-.07-.96.1L14.45 11.5l2.82-2.82L4.14.24z"/>
             </svg>
