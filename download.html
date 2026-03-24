@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="下載 AceSpeller | Download AceSpeller">
+  <meta property="og:description" content="小朋友練默書好幫手，自動發音對答案，家長更輕鬆！">
+  <title>下載 AceSpeller | Download</title>
+  <script>
+    (function () {
+      var ua = navigator.userAgent || navigator.vendor || window.opera;
+      if (/android/i.test(ua)) {
+        window.location.replace('https://play.google.com/store/apps/details?id=com.muduopro.dictationHelper');
+      } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+        // TODO: replace [APP_STORE_ID] with actual App Store numeric ID once known
+        // window.location.replace('https://apps.apple.com/hk/app/acespeller/id[APP_STORE_ID]');
+      }
+      // Desktop / unknown: show the page below
+    })();
+  </script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 24px;
+      padding: 40px 32px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      color: white;
+    }
+    .logo { font-size: 48px; margin-bottom: 12px; }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .tagline { font-size: 15px; opacity: 0.85; margin-bottom: 36px; line-height: 1.5; }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 14px;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn:hover { transform: scale(1.03); opacity: 0.9; }
+    .btn-android { background: #01875f; color: white; }
+    .btn-ios { background: #0071e3; color: white; }
+    .btn-web { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); }
+    .btn svg { flex-shrink: 0; }
+    .divider { border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 20px 0; }
+    .footer { font-size: 12px; opacity: 0.6; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🎓</div>
+    <h1>AceSpeller</h1>
+    <p class="tagline">
+      小朋友練默書好幫手<br>
+      自動發音對答案，家長更輕鬆！
+    </p>
+
+    <a href="https://play.google.com/store/apps/details?id=com.muduopro.dictationHelper" class="btn btn-android">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.33.18.7.2 1.04.05l11.34-6.55-2.4-2.41-9.98 8.91zm-1.34-17.3C1.61 6.8 1.5 7.2 1.5 7.65v8.7c0 .46.11.86.34 1.19l.06.06 4.87-4.87v-.11L1.84 6.46zm14.27 8.23-1.62-1.62v-.11l1.62-1.62.04.02 1.92 1.09c.55.31.55.82 0 1.13l-1.92 1.09-.04.02zM4.22.24C3.88.09 3.51.11 3.18.29l9.97 8.91 2.4-2.41L4.22.24z"/></svg>
+      Google Play (Android)
+    </a>
+
+    <!-- TODO: uncomment and replace [APP_STORE_ID] with actual numeric ID -->
+    <!--
+    <a href="https://apps.apple.com/hk/app/acespeller/id[APP_STORE_ID]" class="btn btn-ios">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      App Store (iOS)
+    </a>
+    -->
+
+    <hr class="divider">
+    <a href="https://acespeller.com.hk" class="btn btn-web">
+      🌐 acespeller.com.hk
+    </a>
+
+    <p class="footer">© 2025 Muduopro Limited</p>
+  </div>
+</body>
+</html>
