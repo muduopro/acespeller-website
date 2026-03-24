@@ -19,7 +19,7 @@ function renderFrame() {
         <nav class="nav-links">
           <a href="#features" data-i18n="nav_features"></a>
           <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
-          <a href="/redeem.html" data-i18n="nav_redeem"></a>
+          <a href="/redeem" data-i18n="nav_redeem"></a>
         </nav>
         <select id="langSwitcher" aria-label="語言切換">
           <option value="zh-HK">繁體中文</option>
@@ -40,7 +40,7 @@ function renderFrame() {
     <div class="mobile-menu" id="mobileMenu" role="navigation">
       <a href="#features" data-i18n="nav_features"></a>
       <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
-      <a href="/redeem.html" data-i18n="nav_redeem"></a>
+      <a href="/redeem" data-i18n="nav_redeem"></a>
       <div class="mobile-lang-row">
         <span>🌐</span>
         <select id="langSwitcherMobile" aria-label="語言切換">
@@ -64,8 +64,8 @@ function renderFrame() {
           <p class="footer-desc" data-i18n="footer_desc"></p>
         </div>
         <div class="footer-links">
-          <a href="/privacy.html" data-i18n="footer_privacy"></a>
-          <a href="/terms.html" data-i18n="footer_terms"></a>
+          <a href="/privacy" data-i18n="footer_privacy"></a>
+          <a href="/terms" data-i18n="footer_terms"></a>
           <a href="mailto:cs@acespeller.com.hk" data-i18n="footer_contact"></a>
         </div>
       </div>
