@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import {
   getAuth,
   GoogleAuthProvider,
@@ -22,6 +23,18 @@ import { firebaseConfig } from './firebaseConfig.js';
 // Firebase 初始化
 // ─────────────────────────────────────────
 const app = initializeApp(firebaseConfig);
+
+// SEC-005 Stage 1: Firebase App Check (reCAPTCHA v3)
+// ⚠️ 在 Firebase Console → App Check → Web 取得 reCAPTCHA v3 Site Key 後填入
+// 步驟：Firebase Console → App Check → 新增應用程式 → Web → 選 reCAPTCHA v3 → 貼入 Site Key
+const RECAPTCHA_V3_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '';
+if (RECAPTCHA_V3_SITE_KEY) {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(RECAPTCHA_V3_SITE_KEY),
+    isTokenAutoRefreshEnabled: true,
+  });
+}
+
 const auth = getAuth(app);
 const db = getFirestore(app);
 
