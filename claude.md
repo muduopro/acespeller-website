@@ -8,7 +8,7 @@
 - **專案名稱**：AceSpeller 默書100分 (宣傳 Landing Page)
 - **目標受眾**：香港的各級學生、家長及教育工作者。
 - **技術堆疊**：Vite + Vanilla JavaScript + HTML5 + CSS3 (無使用大型 UI 框架如 React/Vue，保持輕量高效)。
-- **核心價值**：展示 App 功能（AI 拍照匯入、粵普雙語雙語發音、錯題本等），並引導用戶前往 App Store / Google Play 下載。
+- **核心價值**：展示 App 功能（AI 拍照匯入、粵普雙語雙語發音、錯題本等），並引導用戶前往 App Store (`https://apple.co/47kzZUF`) / Google Play 下載。
 
 ## 🛠️ 開發準則 (Development Guidelines)
 

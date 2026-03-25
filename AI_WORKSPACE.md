@@ -14,6 +14,7 @@
   - [2024-03-x] 建立 AI 角色設定與此協作中樞。
   - [2024-03-x] 更換首頁 Hero 視覺圖，移除原本不相關的 `shop.png`，替換為全新包含 AceSpeller 教育元素（星星吉祥物、閃卡、掃描相機）的 `hero-visual.png`。
   - [2026-03-07] 更新聯絡電子郵件地址：從 `support@acespeller.com.hk` 變更為 `cs@acespeller.com.hk`。
+  - [2026-03-25] 更新全站 iOS 下載連結至正式短網址：`https://apple.co/47kzZUF`。
 
 ## 🎯 待辦任務 (Backlog)
 - [ ] 根據 `WEB_UI_designer.md` 建議，優化首屏 (First Fold) 的下載按鈕轉換率。
