@@ -58,6 +58,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* 捲軸偏移量 (防止 Fixed Navbar 遮擋) */
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 /* === Reset === */
