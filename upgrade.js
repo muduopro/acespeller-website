@@ -11,6 +11,7 @@ import {
 import {
   getFirestore,
   doc,
+  getDoc,
   onSnapshot,
 } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
@@ -63,7 +64,6 @@ const i18n = {
     btnOpenApp: '開啟 App',
     errGeneric: '付款失敗，請稍後再試。',
     errAuthRequired: '請先登入。',
-    demoBanner: '⚠️ 測試模式（Demo）— 請使用測試卡號 4111 1111 1111 1111',
     navBack: '返回首頁',
   },
   'zh-CN': {
@@ -88,7 +88,6 @@ const i18n = {
     btnOpenApp: '打开 App',
     errGeneric: '付款失败，请稍后再试。',
     errAuthRequired: '请先登录。',
-    demoBanner: '⚠️ 测试模式（Demo）— 请使用测试卡号 4111 1111 1111 1111',
     navBack: '返回首页',
   },
   'en-US': {
@@ -113,7 +112,6 @@ const i18n = {
     btnOpenApp: 'Open App',
     errGeneric: 'Payment failed. Please try again later.',
     errAuthRequired: 'Please sign in first.',
-    demoBanner: '⚠️ Demo mode — Use test card 4111 1111 1111 1111',
     navBack: 'Back to Home',
   },
 };
@@ -148,6 +146,7 @@ let currentUser = null;
 let selectedPlan = null; // { plan, tier, days, amount }
 let dropInMounted = false;
 let unsubscribeSnapshot = null;
+let currentSubData = null; // { tier, expiry (Date|null), source, isActive }
 
 // ─────────────────────────────────────────
 // DOM
@@ -167,10 +166,11 @@ const dropin          = document.getElementById('airwallex-dropin');
 const pageTitle       = document.getElementById('page-title');
 const pageSubtitle    = document.getElementById('page-subtitle');
 const loginHintEl     = document.getElementById('login-hint');
-const demoBannerEl    = document.getElementById('demo-banner');
 const navBackText     = document.getElementById('nav-back-text');
 const btnOpenApp      = document.getElementById('btn-open-app');
 const langBtns        = document.querySelectorAll('.lang-btn');
+const subStatusEl     = document.getElementById('sub-status');
+const checkoutModal   = document.getElementById('checkout-modal');
 
 // ─────────────────────────────────────────
 // 語言切換
@@ -186,7 +186,6 @@ function applyLang(lang) {
   document.getElementById('signin-or').textContent = t.signinOr;
   btnSignout.textContent = t.signoutBtn;
   document.getElementById('label-choose-plan').textContent = t.labelChoosePlan;
-  demoBannerEl.textContent = t.demoBanner;
   navBackText.textContent = t.navBack;
   document.getElementById('pay-note').textContent = t.payNote;
   document.getElementById('success-title').textContent = t.successTitle;
@@ -220,6 +219,7 @@ function applyLang(lang) {
   document.documentElement.lang = lang;
   langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
   hideResult();
+  updateSubStatusBanner();
 }
 
 function renderPlanFeatures(containerId, features) {
@@ -233,7 +233,7 @@ langBtns.forEach(b => b.addEventListener('click', () => applyLang(b.dataset.lang
 // ─────────────────────────────────────────
 // Auth
 // ─────────────────────────────────────────
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   if (user) {
     sectionSignin.style.display = 'none';
@@ -243,6 +243,7 @@ onAuthStateChanged(auth, (user) => {
     userAvatar.alt = user.displayName || '';
     userNameEl.textContent = user.displayName || user.email || user.uid;
     // 若已在 success 畫面則保持
+    await loadUserSubData(user.uid);
   } else {
     sectionSignin.style.display = 'block';
     sectionPlans.style.display = 'none';
@@ -250,6 +251,8 @@ onAuthStateChanged(auth, (user) => {
     selectedPlan = null;
     dropInMounted = false;
     dropin.innerHTML = '';
+    currentSubData = null;
+    updateSubStatusBanner();
     if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
   }
   hideResult();
@@ -307,6 +310,13 @@ btnPay.addEventListener('click', async () => {
   if (!currentUser) { showResult('error', i18n[currentLang].errAuthRequired); return; }
   if (!selectedPlan) return;
 
+  // Pre-checkout validation
+  const check = checkPreCheckout(selectedPlan);
+  if (check.type !== 'ok') {
+    const proceed = await showCheckoutModal(check);
+    if (!proceed) return;
+  }
+
   setPayLoading(true);
   hideResult();
 
@@ -321,8 +331,16 @@ btnPay.addEventListener('click', async () => {
     setPayLoading(false);
 
     // 3. 初始化 Airwallex Drop-in
+    // SEC-015: Guard against Airwallex CDN load failure
+    if (typeof Airwallex === 'undefined') {
+      showResult('error', i18n[currentLang].errGeneric);
+      setPayLoading(false);
+      btnPay.style.display = '';
+      console.error('[upgrade] Airwallex SDK not loaded — check CDN');
+      return;
+    }
     await Airwallex.init({
-      env: 'demo',
+      env: 'prod',
       origin: location.origin,
     });
 
@@ -358,6 +376,249 @@ btnPay.addEventListener('click', async () => {
     btnPay.style.display = '';
   }
 });
+
+// ─────────────────────────────────────────
+// 訂閱狀態載入 & Pre-checkout 驗證
+// ─────────────────────────────────────────
+const TIER_RANK  = { free: 0, ace_plus: 1, ace_pro: 2 };
+const TIER_NAMES = {
+  'zh-HK': { free: '免費版',  ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+  'zh-CN': { free: '免费版',  ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+  'en-US': { free: 'Free',    ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+};
+// subscriptionSource values: 'google_play' | 'app_store' | 'web' | 'redemption'
+const IAP_SOURCES = new Set(['google_play', 'app_store', 'iap']); // 'iap' kept as fallback
+const REDEEM_WARN_THRESHOLD = 1; // days ≤ this → skip warning for redeemed tiers
+
+function getTierName(tier, lang) {
+  return (TIER_NAMES[lang] || TIER_NAMES['en-US'])[tier] || tier;
+}
+
+function formatDate(date, lang) {
+  if (!date) return '';
+  const locale = lang === 'zh-CN' ? 'zh-CN' : lang === 'zh-HK' ? 'zh-HK' : 'en-US';
+  return date.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+async function loadUserSubData(uid) {
+  try {
+    const snap = await getDoc(doc(db, 'users', uid));
+    if (!snap.exists()) { currentSubData = null; updateSubStatusBanner(); return; }
+    const d = snap.data();
+    const tier      = d.subscriptionTier || 'free';
+    const expiry    = d.subscriptionExpiry ? d.subscriptionExpiry.toDate() : null;
+    const source    = d.subscriptionSource || null;
+    const productId = d.subscription?.productId || null;
+    const isActive  = !!expiry && expiry > new Date() && tier !== 'free';
+    // isYearly: explicit productId (IAP) or remaining days > 31 (web/redemption proxy)
+    const remainingNow = expiry ? Math.ceil((expiry - new Date()) / 86400000) : 0;
+    const isYearly  = productId?.includes('yearly') || remainingNow > 31;
+    currentSubData  = { tier, expiry, source, productId, isActive, isYearly };
+  } catch (e) {
+    console.error('[upgrade] loadUserSubData error:', e);
+    currentSubData = null;
+  }
+  updateSubStatusBanner();
+}
+
+function updateSubStatusBanner() {
+  if (!subStatusEl) return;
+  if (!currentSubData || !currentSubData.isActive) {
+    subStatusEl.style.display = 'none';
+    return;
+  }
+  const { tier, expiry, source } = currentSubData;
+  const tierName  = getTierName(tier, currentLang);
+  const expiryStr = formatDate(expiry, currentLang);
+  const srcLabel  = {
+    'zh-HK': source === 'iap' ? '(App Store / Play Store)' : '(網頁付款)',
+    'zh-CN': source === 'iap' ? '(App Store / Play Store)' : '(网页付款)',
+    'en-US': source === 'iap' ? '(App Store / Play Store)' : '(Web)',
+  }[currentLang] || '';
+  const labels = {
+    'zh-HK': { cur: '目前方案', exp: '到期日' },
+    'zh-CN': { cur: '当前方案', exp: '到期日' },
+    'en-US': { cur: 'Current plan', exp: 'Expires' },
+  }[currentLang];
+  subStatusEl.style.display = 'flex';
+  subStatusEl.innerHTML =
+    `<span class="sub-status-icon">ℹ️</span>` +
+    `<span>${labels.cur}: <strong>${tierName}</strong> ${srcLabel}&nbsp;·&nbsp;${labels.exp}: <strong>${expiryStr}</strong></span>`;
+}
+
+function checkPreCheckout(plan) {
+  const { tier: buyTier, days } = plan;
+  const now       = new Date();
+  const newExpiry = new Date(now.getTime() + days * 86400000);
+
+  if (!currentSubData || !currentSubData.isActive || currentSubData.tier === 'free') {
+    return { type: 'ok', newExpiry };
+  }
+
+  const { tier: curTier, expiry: curExpiry, source } = currentSubData;
+  const curRank      = TIER_RANK[curTier] ?? 0;
+  const buyRank      = TIER_RANK[buyTier] ?? 0;
+  const remainingDays = curExpiry ? Math.max(0, Math.ceil((curExpiry - now) / 86400000)) : 0;
+
+  // ── BLOCK: downgrade while active ──
+  if (buyRank < curRank) {
+    return { type: 'block', newExpiry, curTier, buyTier, remainingDays, source };
+  }
+  // ── BLOCK: yearly ace_plus → ace_pro upgrade (contact CS for proration) ──
+  if (curTier === 'ace_plus' && buyRank > curRank && currentSubData.isYearly && remainingDays > 1) {
+    return { type: 'block_yearly_upgrade', newExpiry, curTier, buyTier, remainingDays, source };
+  }
+  // ── BLOCK: active IAP subscription — must cancel App sub first ──
+  if (IAP_SOURCES.has(source)) {
+    return { type: 'block_iap', newExpiry, curTier, buyTier, remainingDays, source };
+  }
+  // ── REDEMPTION: free tier from redeem code ──
+  if (source === 'redemption') {
+    // ≤7 days left → almost expired, just let them buy silently
+    if (remainingDays <= REDEEM_WARN_THRESHOLD) return { type: 'ok', newExpiry };
+    // >7 days left → gentle heads-up (free days will be replaced)
+    return { type: 'warn_redeem', newExpiry, curTier, buyTier, remainingDays, source };
+  }
+  // ── WARN: active web subscription (days won't carry over) ──
+  if (remainingDays > 0) {
+    return { type: 'warn_web', newExpiry, curTier, buyTier, remainingDays, source };
+  }
+  return { type: 'ok', newExpiry };
+}
+
+function buildModalContent(result, lang) {
+  const { type, curTier, buyTier, remainingDays, newExpiry } = result;
+  const curName     = getTierName(curTier, lang);
+  const buyName     = getTierName(buyTier, lang);
+  const newExpiryStr = formatDate(newExpiry, lang);
+  const curExpiryStr = formatDate(currentSubData?.expiry, lang);
+  const isUpgrade   = (TIER_RANK[buyTier] ?? 0) > (TIER_RANK[curTier] ?? 0);
+
+  const newExpiryLabel = {
+    'zh-HK': `新到期日：${newExpiryStr}`,
+    'zh-CN': `新到期日：${newExpiryStr}`,
+    'en-US': `New expiry: ${newExpiryStr}`,
+  }[lang];
+  const remainingLabel = {
+    'zh-HK': `剩餘 ${remainingDays} 天`,
+    'zh-CN': `剩余 ${remainingDays} 天`,
+    'en-US': `${remainingDays} days remaining`,
+  }[lang];
+
+  if (type === 'block') {
+    return {
+      icon: '🚫',
+      title: { 'zh-HK': '無法完成購買', 'zh-CN': '无法完成购买', 'en-US': 'Cannot Proceed' }[lang],
+      body: {
+        'zh-HK': `<p>你目前訂閱了較高階的 <strong>${curName}</strong>（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>無法降級購買 <strong>${buyName}</strong>，請等現有訂閱到期後再購買。</p>`,
+        'zh-CN': `<p>你当前订阅了较高阶的 <strong>${curName}</strong>（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>无法降级购买 <strong>${buyName}</strong>，请等当前订阅到期后再购买。</p>`,
+        'en-US': `<p>You have an active <strong>${curName}</strong> subscription (expires: ${curExpiryStr}, ${remainingLabel}).</p><p>Purchasing <strong>${buyName}</strong> is not allowed as it is a lower tier. Please wait until your current subscription expires.</p>`,
+      }[lang],
+      expiryText: null,
+      canProceed: false,
+    };
+  }
+
+  if (type === 'block_yearly_upgrade') {
+    const body = {
+      'zh-HK': `<p>你目前持有<strong>年費 ${curName}</strong>（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>年費方案無法直接升級至 <strong>${buyName}</strong>，請聯絡客服協助處理（可按比例折算剩餘價值）。</p><p>📧 <a href="mailto:support@acespeller.com">support@acespeller.com</a></p>`,
+      'zh-CN': `<p>你当前持有<strong>年费 ${curName}</strong>（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>年费方案无法直接升级至 <strong>${buyName}</strong>，请联系客服协助处理（可按比例折算剩余价值）。</p><p>📧 <a href="mailto:support@acespeller.com">support@acespeller.com</a></p>`,
+      'en-US': `<p>You have an active <strong>yearly ${curName}</strong> subscription (expires: ${curExpiryStr}, ${remainingLabel}).</p><p>Yearly plans cannot be upgraded directly to <strong>${buyName}</strong>. Please contact support for assistance (remaining value can be prorated).</p><p>📧 <a href="mailto:support@acespeller.com">support@acespeller.com</a></p>`,
+    }[lang];
+    return {
+      icon: '🚫',
+      title: { 'zh-HK': '請聯絡客服升級', 'zh-CN': '请联系客服升级', 'en-US': 'Contact Support to Upgrade' }[lang],
+      body,
+      expiryText: null,
+      canProceed: false,
+    };
+  }
+
+  if (type === 'block_iap') {
+    const body = {
+      'zh-HK': `<p>你已透過 App Store / Play Store 訂閱 <strong>${curName}</strong>（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>為避免重複付費，請先在 <strong>App Store / Play Store 取消現有訂閱</strong>，等到期後再於此頁購買。</p>`,
+      'zh-CN': `<p>你已通过 App Store / Play Store 订阅 <strong>${curName}</strong>（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>为避免重复付费，请先在 <strong>App Store / Play Store 取消现有订阅</strong>，等到期后再于此页购买。</p>`,
+      'en-US': `<p>You have an active <strong>${curName}</strong> subscription via App Store / Play Store (expires: ${curExpiryStr}, ${remainingLabel}).</p><p>To avoid double billing, please <strong>cancel your App Store / Play Store subscription first</strong>, then return here after it expires to purchase.</p>`,
+    }[lang];
+    return {
+      icon: '🚫',
+      title: { 'zh-HK': '無法完成購買', 'zh-CN': '无法完成购买', 'en-US': 'Cannot Proceed' }[lang],
+      body,
+      expiryText: null,
+      canProceed: false,
+    };
+  }
+
+  if (type === 'warn_web') {
+    const body = {
+      'zh-HK': isUpgrade
+        ? `<p>你將從 <strong>${curName}</strong> 升級至 <strong>${buyName}</strong>（現有到期日：${curExpiryStr}，${remainingLabel}）。</p><p>升級後到期日從今天起重新計算，<strong>現有剩餘天數不會累加</strong>到新方案。</p>`
+        : `<p>你已有 <strong>${curName}</strong> 訂閱（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>購買後到期日從今天起重新計算，<strong>現有剩餘天數不會累加</strong>。建議等到期後再續訂。</p>`,
+      'zh-CN': isUpgrade
+        ? `<p>你将从 <strong>${curName}</strong> 升级至 <strong>${buyName}</strong>（当前到期日：${curExpiryStr}，${remainingLabel}）。</p><p>升级后到期日从今天起重新计算，<strong>现有剩余天数不会累加</strong>到新方案。</p>`
+        : `<p>你已有 <strong>${curName}</strong> 订阅（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>购买后到期日从今天起重新计算，<strong>现有剩余天数不会累加</strong>。建议等到期后再续订。</p>`,
+      'en-US': isUpgrade
+        ? `<p>You are upgrading from <strong>${curName}</strong> to <strong>${buyName}</strong> (current expiry: ${curExpiryStr}, ${remainingLabel}).</p><p>The new expiry will be calculated from today. <strong>Remaining days will not carry over</strong> to the new plan.</p>`
+        : `<p>You have an active <strong>${curName}</strong> subscription (expires: ${curExpiryStr}, ${remainingLabel}).</p><p>The new expiry will be recalculated from today. <strong>Remaining days will not carry over.</strong> We recommend waiting until your subscription expires before renewing.</p>`,
+    }[lang];
+    return {
+      icon: '⚠️',
+      title: { 'zh-HK': '購買前請注意', 'zh-CN': '购买前请注意', 'en-US': 'Please Note' }[lang],
+      body,
+      expiryText: newExpiryLabel,
+      canProceed: true,
+    };
+  }
+
+  if (type === 'warn_redeem') {
+    const body = {
+      'zh-HK': `<p>你目前持有以兌換碼獲得的 <strong>${curName}</strong>（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>購買後到期日從今天起重新計算，免費兌換的剩餘天數不會累加。</p>`,
+      'zh-CN': `<p>你当前持有以兑换码获得的 <strong>${curName}</strong>（到期日：${curExpiryStr}，${remainingLabel}）。</p><p>购买后到期日从今天起重新计算，免费兑换的剩余天数不会累加。</p>`,
+      'en-US': `<p>You have a <strong>${curName}</strong> subscription from a redeemed code (expires: ${curExpiryStr}, ${remainingLabel}).</p><p>The new expiry will be calculated from today. The remaining free days will not carry over.</p>`,
+    }[lang];
+    return {
+      icon: 'ℹ️',
+      title: { 'zh-HK': '即將購買付費方案', 'zh-CN': '即将购买付费方案', 'en-US': 'Switching to Paid Plan' }[lang],
+      body,
+      expiryText: newExpiryLabel,
+      canProceed: true,
+    };
+  }
+
+  return { icon: 'ℹ️', title: '', body: '', expiryText: null, canProceed: true };
+}
+
+function showCheckoutModal(result) {
+  return new Promise((resolve) => {
+    const c = buildModalContent(result, currentLang);
+    document.getElementById('modal-icon').textContent  = c.icon;
+    document.getElementById('modal-title').textContent = c.title;
+    document.getElementById('modal-body').innerHTML    = c.body;
+
+    const expiryEl = document.getElementById('modal-expiry');
+    if (c.expiryText) {
+      expiryEl.textContent  = c.expiryText;
+      expiryEl.style.display = 'block';
+    } else {
+      expiryEl.style.display = 'none';
+    }
+
+    const proceedBtn = document.getElementById('modal-proceed-btn');
+    const cancelBtn  = document.getElementById('modal-cancel-btn');
+
+    const close = (val) => { checkoutModal.style.display = 'none'; resolve(val); };
+
+    if (c.canProceed) {
+      proceedBtn.style.display = '';
+      proceedBtn.onclick = () => close(true);
+    } else {
+      proceedBtn.style.display = 'none';
+    }
+    cancelBtn.onclick = () => close(false);
+
+    checkoutModal.style.display = 'flex';
+  });
+}
 
 // ─────────────────────────────────────────
 // Firestore 監聽（確認後端已更新 tier）

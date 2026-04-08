@@ -20,7 +20,7 @@ function renderFrame() {
           <a href="#features" data-i18n="nav_features"></a>
           <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
           <a href="/redeem" data-i18n="nav_redeem"></a>
-          <!-- <a href="/upgrade" data-i18n="nav_upgrade"></a> 暫時隱藏升級連結（Demo 卡片階段） -->
+          <a href="/upgrade" data-i18n="nav_upgrade"></a>
         </nav>
         <select id="langSwitcher" aria-label="語言切換">
           <option value="zh-HK">繁體中文</option>
@@ -42,7 +42,7 @@ function renderFrame() {
       <a href="#features" data-i18n="nav_features"></a>
       <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
       <a href="/redeem" data-i18n="nav_redeem"></a>
-      <!-- <a href="/upgrade" data-i18n="nav_upgrade"></a> 暫時隱藏升級連結（Demo 卡片階段） -->
+      <a href="/upgrade" data-i18n="nav_upgrade"></a>
       <div class="mobile-lang-row">
         <span>🌐</span>
         <select id="langSwitcherMobile" aria-label="語言切換">

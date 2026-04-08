@@ -446,18 +446,6 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Demo banner */
-    .demo-banner {
-      background: rgba(255, 193, 7, 0.12);
-      border: 1px solid rgba(255, 193, 7, 0.4);
-      color: #ffc107;
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      text-align: center;
-    }
 
     .section-label {
       font-size: 0.78rem;
@@ -474,6 +462,67 @@
       background: var(--glass-border);
       margin: 20px 0;
     }
+
+    /* Current subscription status banner */
+    .sub-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(74, 108, 247, 0.08);
+      border: 1px solid rgba(74, 108, 247, 0.25);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: #3a5ce5;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .sub-status-icon { font-size: 1rem; flex-shrink: 0; }
+
+    /* Pre-checkout modal */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px 24px 24px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .modal-icon { font-size: 2.4rem; margin-bottom: 10px; }
+    .modal-title {
+      font-size: 1.05rem; font-weight: 700;
+      margin: 0 0 14px; color: #1a1a2e;
+    }
+    .modal-body {
+      font-size: 0.875rem; color: #444; line-height: 1.65;
+      text-align: left; margin-bottom: 14px;
+      max-height: 220px; overflow-y: auto;
+    }
+    .modal-body p { margin: 0 0 8px; }
+    .modal-body p:last-child { margin-bottom: 0; }
+    .modal-expiry {
+      background: #f0f4ff; border-radius: 8px;
+      padding: 9px 14px; font-size: 0.88rem;
+      font-weight: 600; color: #4a6cf7;
+      margin-bottom: 20px;
+    }
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-btn {
+      flex: 1; padding: 11px 8px; border-radius: 10px;
+      font-size: 0.92rem; font-weight: 600;
+      border: none; cursor: pointer; transition: opacity .15s;
+    }
+    .modal-btn:hover { opacity: 0.85; }
+    .modal-btn-cancel { background: #f0f0f0; color: #555; }
+    .modal-btn-proceed { background: #4a6cf7; color: #fff; }
   </style>
 </head>
 
@@ -497,11 +546,6 @@
       <img src="/logo.png" alt="AceSpeller" class="upgrade-logo" />
       <h1 class="upgrade-title" id="page-title">升級方案</h1>
       <p class="upgrade-subtitle" id="page-subtitle">解鎖完整功能，讓學習更上一層樓。</p>
-
-      <!-- Demo 環境提示 -->
-      <div class="demo-banner" id="demo-banner">
-        ⚠️ 測試模式（Demo）— 請使用測試卡號 4111 1111 1111 1111
-      </div>
 
       <!-- Section 1: 未登入 -->
       <div id="section-signin">
@@ -535,6 +579,9 @@
           <span id="user-name" class="user-name"></span>
           <button class="btn-signout" id="btn-signout">登出</button>
         </div>
+
+        <!-- 當前訂閱狀態（登入後若有有效訂閱則顯示） -->
+        <div class="sub-status" id="sub-status" style="display:none;"></div>
 
         <!-- 方案選擇 -->
         <p class="section-label" id="label-choose-plan">選擇方案</p>
@@ -598,6 +645,20 @@
         <button class="lang-btn active" data-lang="zh-HK">繁中</button>
         <button class="lang-btn" data-lang="zh-CN">简中</button>
         <button class="lang-btn" data-lang="en-US">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pre-checkout Warning Modal -->
+  <div class="modal-overlay" id="checkout-modal" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-icon" id="modal-icon">⚠️</div>
+      <h3 class="modal-title" id="modal-title"></h3>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-expiry" id="modal-expiry" style="display:none;"></div>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-cancel" id="modal-cancel-btn">返回</button>
+        <button class="modal-btn modal-btn-proceed" id="modal-proceed-btn">確認付款</button>
       </div>
     </div>
   </div>
