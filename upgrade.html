@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="zh-HK">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>升級方案 - AceSpeller 默書100分</title>
+  <meta name="description" content="升級 AceSpeller Ace Plus 或 Ace Pro，解鎖無限功能。" />
+  <meta name="robots" content="noindex" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Airwallex Drop-in SDK -->
+  <script src="https://checkout.airwallex.com/assets/elements.bundle.min.js"></script>
+
+  <style>
+    .upgrade-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 80px 24px 48px;
+    }
+
+    .upgrade-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(16px);
+      text-align: center;
+    }
+
+    .upgrade-logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      display: block;
+    }
+
+    .upgrade-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+
+    .upgrade-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    /* Google / Apple Sign-In buttons (reuse from redeem) */
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 20px;
+      background: #fff;
+      color: #3c4043;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-google:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-google:active { transform: translateY(0); }
+    .btn-google svg { flex-shrink: 0; }
+
+    .btn-apple {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 20px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-apple:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-apple:active { transform: translateY(0); }
+    .btn-apple svg { flex-shrink: 0; }
+
+    /* Or Divider */
+    .signin-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .signin-divider::before,
+    .signin-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--glass-border);
+    }
+
+    /* User Info Bar */
+    .user-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      padding: 10px 16px;
+      margin-bottom: 28px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .user-name {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      flex: 1;
+      text-align: left;
+    }
+
+    .btn-signout {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s;
+    }
+
+    .btn-signout:hover { color: var(--coral); }
+
+    /* Plan Cards */
+    .plan-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .plan-grid { grid-template-columns: 1fr; }
+    }
+
+    .plan-card {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      text-align: left;
+      position: relative;
+    }
+
+    .plan-card:hover {
+      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    .plan-card.selected {
+      border-color: var(--gold);
+      background: rgba(255, 215, 0, 0.08);
+    }
+
+    .plan-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 1rem;
+    }
+
+    .plan-badge {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .plan-name {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-white);
+      margin-bottom: 2px;
+    }
+
+    .plan-billing {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .plan-price {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .plan-price span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .plan-features li {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      padding: 2px 0;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .plan-features li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+    }
+
+    /* Pay Button */
+    .btn-pay {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: #1a0533;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-bottom: 16px;
+    }
+
+    .btn-pay:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
+    .btn-pay:active:not(:disabled) { transform: translateY(0); }
+    .btn-pay:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Airwallex Drop-in container */
+    #airwallex-dropin {
+      margin-bottom: 16px;
+      min-height: 0;
+    }
+
+    /* Result / Error Banner */
+    .result-banner {
+      display: none;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: left;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .result-banner.success {
+      background: rgba(78, 205, 196, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+
+    .result-banner.error {
+      background: rgba(255, 107, 107, 0.12);
+      border: 1px solid var(--coral);
+      color: var(--coral-light);
+    }
+
+    .result-banner.show { display: block; }
+
+    /* Success Screen */
+    .success-screen {
+      padding: 16px 0;
+    }
+
+    .success-icon {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+    }
+
+    .success-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+
+    .success-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .btn-open-app {
+      display: inline-block;
+      padding: 13px 32px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: #1a0533;
+      border-radius: var(--radius-pill);
+      font-size: 0.95rem;
+      font-weight: 900;
+      text-decoration: none;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .btn-open-app:hover { opacity: 0.88; }
+
+    /* Lang Switcher */
+    .lang-switcher {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .lang-btn {
+      background: none;
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active, .lang-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Top Navbar */
+    .upgrade-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: rgba(15, 5, 30, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .upgrade-nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-white);
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .upgrade-nav-brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .upgrade-nav-back {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s;
+    }
+
+    .upgrade-nav-back:hover { color: var(--gold); }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(26,5,51,0.4);
+      border-top-color: #1a0533;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Demo banner */
+    .demo-banner {
+      background: rgba(255, 193, 7, 0.12);
+      border: 1px solid rgba(255, 193, 7, 0.4);
+      color: #ffc107;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: left;
+      margin-bottom: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="upgrade-nav">
+    <a href="/" class="upgrade-nav-brand">
+      <img src="/logo.png" alt="AceSpeller" />
+      <span>AceSpeller</span>
+    </a>
+    <a href="/" class="upgrade-nav-back" id="nav-back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span id="nav-back-text">返回首頁</span>
+    </a>
+  </nav>
+
+  <div class="upgrade-page">
+    <div class="upgrade-card">
+      <img src="/logo.png" alt="AceSpeller" class="upgrade-logo" />
+      <h1 class="upgrade-title" id="page-title">升級方案</h1>
+      <p class="upgrade-subtitle" id="page-subtitle">解鎖完整功能，讓學習更上一層樓。</p>
+
+      <!-- Demo 環境提示 -->
+      <div class="demo-banner" id="demo-banner">
+        ⚠️ 測試模式（Demo）— 請使用測試卡號 4111 1111 1111 1111
+      </div>
+
+      <!-- Section 1: 未登入 -->
+      <div id="section-signin">
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:20px;" id="login-hint">請先登入以繼續升級。</p>
+
+        <button class="btn-google" id="btn-google-signin">
+          <svg width="20" height="20" viewBox="0 0 20 20">
+            <path d="M19.6 10.23c0-.68-.06-1.36-.18-2H10v3.77h5.4a4.6 4.6 0 01-2 3.02v2.5h3.24c1.9-1.75 3-4.33 3-7.3z" fill="#4285F4"/>
+            <path d="M10 20c2.7 0 4.97-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.96-3.38.96-2.6 0-4.8-1.75-5.59-4.11H1.06v2.58A10 10 0 0010 20z" fill="#34A853"/>
+            <path d="M4.41 11.91A6.01 6.01 0 014.1 10c0-.67.12-1.32.31-1.91V5.51H1.06A10 10 0 000 10c0 1.61.38 3.13 1.06 4.49l3.35-2.58z" fill="#FBBC05"/>
+            <path d="M10 3.97c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.9 12.7 0 10 0A10 10 0 001.06 5.51l3.35 2.58C5.2 5.72 7.4 3.97 10 3.97z" fill="#EA4335"/>
+          </svg>
+          <span id="btn-google-text">以 Google 帳號登入</span>
+        </button>
+
+        <div class="signin-divider"><span id="signin-or">或</span></div>
+
+        <button class="btn-apple" id="btn-apple-signin">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          <span id="btn-apple-text">以 Apple ID 登入</span>
+        </button>
+      </div>
+
+      <!-- Section 2: 已登入 — 選擇方案 + 付款 -->
+      <div id="section-plans" style="display:none;">
+        <!-- 用戶資訊列 -->
+        <div class="user-bar">
+          <img id="user-avatar" class="user-avatar" src="" alt="" />
+          <span id="user-name" class="user-name"></span>
+          <button class="btn-signout" id="btn-signout">登出</button>
+        </div>
+
+        <!-- 方案選擇 -->
+        <p class="section-label" id="label-choose-plan">選擇方案</p>
+        <div class="plan-grid" id="plan-grid">
+          <!-- Plus 月費 -->
+          <div class="plan-card" data-plan="ace_plus_monthly" data-tier="ace_plus" data-days="30" data-amount="3800">
+            <div class="plan-badge">💎</div>
+            <div class="plan-name" id="name-plus-monthly">Ace Plus · 月費</div>
+            <div class="plan-price">HK$38 <span id="per-month-1">/ 月</span></div>
+            <ul class="plan-features" id="features-plus"></ul>
+          </div>
+          <!-- Plus 年費 -->
+          <div class="plan-card" data-plan="ace_plus_yearly" data-tier="ace_plus" data-days="365" data-amount="38800">
+            <div class="plan-badge">💎</div>
+            <div class="plan-name" id="name-plus-yearly">Ace Plus · 年費</div>
+            <div class="plan-price">HK$388 <span id="per-year-1">/ 年</span></div>
+            <ul class="plan-features" id="features-plus-yr"></ul>
+          </div>
+          <!-- Pro 月費 -->
+          <div class="plan-card" data-plan="ace_pro_monthly" data-tier="ace_pro" data-days="30" data-amount="8800">
+            <div class="plan-badge">👑</div>
+            <div class="plan-name" id="name-pro-monthly">Ace Pro · 月費</div>
+            <div class="plan-price">HK$88 <span id="per-month-2">/ 月</span></div>
+            <ul class="plan-features" id="features-pro"></ul>
+          </div>
+          <!-- Pro 年費 -->
+          <div class="plan-card" data-plan="ace_pro_yearly" data-tier="ace_pro" data-days="365" data-amount="78800">
+            <div class="plan-badge">👑</div>
+            <div class="plan-name" id="name-pro-yearly">Ace Pro · 年費</div>
+            <div class="plan-price">HK$788 <span id="per-year-2">/ 年</span></div>
+            <ul class="plan-features" id="features-pro-yr"></ul>
+          </div>
+        </div>
+
+        <!-- 錯誤提示 -->
+        <div id="result-banner" class="result-banner"></div>
+
+        <!-- 付款按鈕（未初始化 Drop-in 前顯示） -->
+        <button class="btn-pay" id="btn-pay" disabled>
+          <span id="btn-pay-text">請先選擇方案</span>
+        </button>
+
+        <!-- Airwallex Drop-in 容器（初始化後填充） -->
+        <div id="airwallex-dropin"></div>
+
+        <p style="font-size:0.72rem; color:var(--text-muted); margin-top:8px;" id="pay-note">
+          付款由 Airwallex 安全處理，AceSpeller 不儲存您的卡號。
+        </p>
+      </div>
+
+      <!-- Section 3: 成功畫面 -->
+      <div id="section-success" style="display:none;" class="success-screen">
+        <div class="success-icon">🎉</div>
+        <h2 class="success-title" id="success-title">升級成功！</h2>
+        <p class="success-desc" id="success-desc">您的帳號已升級。請重新開啟 AceSpeller App 即可生效。</p>
+        <a href="#" class="btn-open-app" id="btn-open-app">開啟 App</a>
+      </div>
+
+      <!-- 語言切換 -->
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="zh-HK">繁中</button>
+        <button class="lang-btn" data-lang="zh-CN">简中</button>
+        <button class="lang-btn" data-lang="en-US">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/upgrade.js"></script>
+</body>
+
+</html>

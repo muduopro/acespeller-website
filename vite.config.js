@@ -12,6 +12,7 @@ export default defineConfig({
         privacy: resolve(__dirname, 'privacy.html'),
         terms: resolve(__dirname, 'terms.html'),
         redeem: resolve(__dirname, 'redeem.html'),
+        upgrade: resolve(__dirname, 'upgrade.html'),
         download: resolve(__dirname, 'download.html'),
       },
     },
