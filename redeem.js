@@ -64,10 +64,19 @@ const i18n = {
     errLimitReached: '此兌換碼已達使用上限。',
     errAlreadyRedeemed: '你已兌換過此序號了。',
     errDowngrade: '此兌換碼的等級低於您目前的方案，無法兌換。',
+    errSchoolMismatch: '此兌換碼屬於另一所學校，無法使用。',
     errGeneric: '兌換失敗，請稍後再試。',
     errLoginRequired: '請先登入才能兌換。',
     errEmptyCode: '請輸入兌換碼。',
     tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+    // PTA 同意書
+    ptaConsentTitle: '學校資料共享同意書',
+    ptaConsentBody: (school) => `此兌換碼由 <strong>${school}</strong> 家長教師會（PTA）提供。兌換後，您的以下資料將提供予 ${school} 及其 PTA 作教學分析用途：`,
+    ptaConsentItems: ['帳號登入活躍度（登入次數及最後登入日期）', '默書練習次數', '訂閱狀態及有效期'],
+    ptaConsentNote: '上述資料僅供 PTA 評估學習進度之用，不會對外分享或用於商業目的。',
+    ptaConsentCheckbox: '本人已閱讀上述說明，並同意提供相關資料予學校及 PTA。',
+    ptaConsentAgree: '同意並繼續',
+    ptaConsentCancel: '取消',
   },
   'zh-CN': {
     pageTitle: '兑换码',
@@ -86,10 +95,18 @@ const i18n = {
     errLimitReached: '此兑换码已达使用上限。',
     errAlreadyRedeemed: '你已兑换过此序号了。',
     errDowngrade: '此兑换码的等级低于您目前的方案，无法兑换。',
+    errSchoolMismatch: '此兑换码属于另一所学校，无法使用。',
     errGeneric: '兑换失败，请稍后再试。',
     errLoginRequired: '请先登录才能兑换。',
     errEmptyCode: '请输入兑换码。',
     tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+    ptaConsentTitle: '学校资料共享同意书',
+    ptaConsentBody: (school) => `此兑换码由 <strong>${school}</strong> 家长教师会（PTA）提供。兑换后，您的以下资料将提供予 ${school} 及其 PTA 作教学分析用途：`,
+    ptaConsentItems: ['账号登录活跃度（登录次数及最后登录日期）', '默书练习次数', '订阅状态及有效期'],
+    ptaConsentNote: '上述资料仅供 PTA 评估学习进度之用，不会对外分享或用于商业目的。',
+    ptaConsentCheckbox: '本人已阅读上述说明，并同意提供相关资料予学校及 PTA。',
+    ptaConsentAgree: '同意并继续',
+    ptaConsentCancel: '取消',
   },
   'en-US': {
     pageTitle: 'Redeem Code',
@@ -108,10 +125,18 @@ const i18n = {
     errLimitReached: 'This code has reached its usage limit.',
     errAlreadyRedeemed: 'You have already redeemed this code.',
     errDowngrade: 'This code is a lower tier than your current plan.',
+    errSchoolMismatch: 'This code belongs to a different school.',
     errGeneric: 'Redemption failed. Please try again later.',
     errLoginRequired: 'Please sign in before redeeming.',
     errEmptyCode: 'Please enter a code.',
     tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
+    ptaConsentTitle: 'School Data Sharing Consent',
+    ptaConsentBody: (school) => `This code is provided by <strong>${school}</strong> PTA. After redemption, the following data will be shared with ${school} and its PTA for educational analytics:`,
+    ptaConsentItems: ['Login activity (login count and last active date)', 'Number of dictation sessions', 'Subscription status and expiry'],
+    ptaConsentNote: 'The above data is used solely for PTA learning progress assessment and will not be shared externally or used for commercial purposes.',
+    ptaConsentCheckbox: 'I have read the above and consent to sharing my data with the school and PTA.',
+    ptaConsentAgree: 'Agree & Continue',
+    ptaConsentCancel: 'Cancel',
   },
 };
 
@@ -231,8 +256,10 @@ async function redeemSubscriptionCode(userId, codeId) {
 
     const tier = data.tier ?? 'ace_plus';
     const durationDays = data.durationDays ?? 30;
+    const codeSchool = data.school ?? null;
+    const codeBatchYear = data.batchYear ?? null;
 
-    // 防降級檢查
+    // 防降級 + 學校綁定檢查
     const userSnap = await tx.get(userRef);
     if (userSnap.exists()) {
       const ud = userSnap.data();
@@ -243,23 +270,38 @@ async function redeemSubscriptionCode(userId, codeId) {
         const codeVal = tierValue[tier] ?? 0;
         if (codeVal < currentVal) return { result: 'downgrade' };
       }
+      // PTA: 學校綁定保護
+      if (codeSchool && ud.schoolInfo?.school && ud.schoolInfo.school !== codeSchool) {
+        return { result: 'school_mismatch' };
+      }
     }
 
     const newExpiry = new Date();
     newExpiry.setDate(newExpiry.getDate() + durationDays);
 
-    tx.set(userRef, {
+    // 用戶資料更新
+    const userUpdate = {
       subscriptionTier: tier,
       subscriptionSource: 'redemption',
       subscriptionExpiry: newExpiry,
       redemptionCodeUsed: codeId,
       lastUpdated: serverTimestamp(),
-    }, { merge: true });
+    };
+    // PTA: 寫入 schoolInfo + ptaConsentAt
+    if (codeSchool) {
+      userUpdate.schoolInfo = { school: codeSchool, ...(codeBatchYear ? { batchYear: codeBatchYear } : {}) };
+      userUpdate.ptaConsentAt = serverTimestamp();
+    }
 
-    tx.update(codeRef, {
+    tx.set(userRef, userUpdate, { merge: true });
+
+    // 碼更新：usedCount + redeemedBy + redemptionTimestamps
+    const codeUpdate = {
       usedCount: increment(1),
       redeemedBy: arrayUnion(userId),
-    });
+      [`redemptionTimestamps.${userId}`]: serverTimestamp(),
+    };
+    tx.update(codeRef, codeUpdate);
 
     return { result: 'success', tier, durationDays };
   });
@@ -302,6 +344,74 @@ async function claimCoinsCode(userId, codeId) {
   });
 
   return coinsEarned;
+}
+
+// ─────────────────────────────────────────
+// PTA 同意書 Modal
+// ─────────────────────────────────────────
+
+/** 動態建立並顯示 PTA 同意書 Modal，返回 Promise<boolean>（true = 同意）*/
+function showPtaConsentModal(school) {
+  return new Promise((resolve) => {
+    const t = i18n[currentLang];
+
+    // 建立 overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;
+      display:flex;align-items:center;justify-content:center;padding:16px;
+    `;
+
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      background:#fff;border-radius:16px;padding:24px;max-width:480px;width:100%;
+      box-shadow:0 8px 32px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;
+    `;
+
+    const itemsHtml = t.ptaConsentItems.map(item => `<li style="margin:4px 0">${item}</li>`).join('');
+
+    modal.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <span style="font-size:24px">🏫</span>
+        <strong style="font-size:17px">${t.ptaConsentTitle}</strong>
+      </div>
+      <p style="font-size:14px;margin-bottom:8px">${t.ptaConsentBody(school)}</p>
+      <ul style="font-size:14px;margin:8px 0 12px 16px;padding:0">${itemsHtml}</ul>
+      <p style="font-size:13px;color:#666;margin-bottom:16px">${t.ptaConsentNote}</p>
+      <label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;margin-bottom:20px">
+        <input type="checkbox" id="pta-consent-checkbox" style="margin-top:3px;flex-shrink:0">
+        <span style="font-size:13px">${t.ptaConsentCheckbox}</span>
+      </label>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button id="pta-cancel-btn" style="padding:8px 16px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;font-size:14px">
+          ${t.ptaConsentCancel}
+        </button>
+        <button id="pta-agree-btn" disabled style="padding:8px 20px;border:none;border-radius:8px;background:#3B82F6;color:#fff;cursor:pointer;font-size:14px;opacity:0.5">
+          ${t.ptaConsentAgree}
+        </button>
+      </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    const checkbox = modal.querySelector('#pta-consent-checkbox');
+    const agreeBtn = modal.querySelector('#pta-agree-btn');
+    const cancelBtn = modal.querySelector('#pta-cancel-btn');
+
+    checkbox.addEventListener('change', () => {
+      agreeBtn.disabled = !checkbox.checked;
+      agreeBtn.style.opacity = checkbox.checked ? '1' : '0.5';
+    });
+    agreeBtn.addEventListener('click', () => {
+      document.body.removeChild(overlay);
+      resolve(true);
+    });
+    cancelBtn.addEventListener('click', () => {
+      document.body.removeChild(overlay);
+      resolve(false);
+    });
+  });
 }
 
 // ─────────────────────────────────────────
@@ -349,7 +459,8 @@ redeemForm.addEventListener('submit', async (e) => {
       return;
     }
 
-    const isCoinsCode = codeSnap.data().coins !== undefined;
+    const codeData = codeSnap.data();
+    const isCoinsCode = codeData.coins !== undefined;
 
     if (isCoinsCode) {
       // AceCoins 兌換碼
@@ -357,6 +468,15 @@ redeemForm.addEventListener('submit', async (e) => {
       showResult('success', t.successCoins(coins));
       codeInput.value = '';
     } else {
+      // PTA 學校合約：若碼含 school 欄位，先顯示資料共享同意書
+      const codeSchool = codeData.school;
+      if (codeSchool) {
+        setLoading(false);
+        const consented = await showPtaConsentModal(codeSchool);
+        if (!consented) return; // 用戶取消，不繼續兌換
+        setLoading(true);
+      }
+
       // 訂閱方案兌換碼
       const res = await redeemSubscriptionCode(currentUser.uid, rawCode);
       switch (res.result) {
@@ -371,6 +491,7 @@ redeemForm.addEventListener('submit', async (e) => {
         case 'limit_reached':  showResult('error', t.errLimitReached); break;
         case 'already_redeemed': showResult('error', t.errAlreadyRedeemed); break;
         case 'downgrade':      showResult('error', t.errDowngrade); break;
+        case 'school_mismatch': showResult('error', t.errSchoolMismatch); break;
         default:               showResult('error', t.errGeneric);
       }
     }
