@@ -366,6 +366,7 @@ function showPtaConsentModal(school) {
     modal.style.cssText = `
       background:#fff;color:#1a1a1a;border-radius:16px;padding:24px;max-width:480px;width:100%;
       box-shadow:0 8px 32px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;
+      color-scheme: light;
     `;
 
     const itemsHtml = t.ptaConsentItems.map(item => `<li style="margin:4px 0">${item}</li>`).join('');
