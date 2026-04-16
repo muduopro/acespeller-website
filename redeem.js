@@ -71,9 +71,8 @@ const i18n = {
     tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
     // PTA 同意書
     ptaConsentTitle: '學校資料共享同意書',
-    ptaConsentBody: (school) => `此兌換碼由 <strong>${school}</strong> 家長教師會（PTA）提供。兌換後，您的以下資料將提供予 ${school} 及其 PTA 作教學分析用途：`,
+    ptaConsentBody: (school) => `感謝你使用默書100分AceSpeller，為了提供更好的服務，以下資料或會被提供予<strong>天神嘉諾撒學校</strong>作教學分析用途：`,
     ptaConsentItems: ['帳號登入活躍度（登入次數及最後登入日期）', '默書練習次數', '訂閱狀態及有效期'],
-    ptaConsentNote: '上述資料僅供 PTA 評估學習進度之用，不會對外分享或用於商業目的。',
     ptaConsentCheckbox: '本人已閱讀上述說明，並同意提供相關資料予學校及 PTA。',
     ptaConsentAgree: '同意並繼續',
     ptaConsentCancel: '取消',
@@ -101,10 +100,9 @@ const i18n = {
     errEmptyCode: '请输入兑换码。',
     tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
     ptaConsentTitle: '学校资料共享同意书',
-    ptaConsentBody: (school) => `此兑换码由 <strong>${school}</strong> 家长教师会（PTA）提供。兑换后，您的以下资料将提供予 ${school} 及其 PTA 作教学分析用途：`,
-    ptaConsentItems: ['账号登录活跃度（登录次数及最后登录日期）', '默书练习次数', '订阅状态及有效期'],
-    ptaConsentNote: '上述资料仅供 PTA 评估学习进度之用，不会对外分享或用于商业目的。',
-    ptaConsentCheckbox: '本人已阅读上述说明，并同意提供相关资料予学校及 PTA。',
+    ptaConsentBody: (school) => `感谢你使用听写100分AceSpeller，为了提供更好的服务，以下资料或會被提供予<strong>天神嘉诺撒学校</strong>作教学分析用途：`,
+    ptaConsentItems: ['账号登录活跃度（登录次数及最后登录日期）', '听写练习次数', '订阅状态及有效期'],
+    ptaConsentCheckbox: '本人已阅读上述说明，並同意提供相关资料予学校及 PTA。',
     ptaConsentAgree: '同意并继续',
     ptaConsentCancel: '取消',
   },
@@ -131,9 +129,8 @@ const i18n = {
     errEmptyCode: 'Please enter a code.',
     tierNames: { ace_plus: 'Ace Plus 💎', ace_pro: 'Ace Pro 👑' },
     ptaConsentTitle: 'School Data Sharing Consent',
-    ptaConsentBody: (school) => `This code is provided by <strong>${school}</strong> PTA. After redemption, the following data will be shared with ${school} and its PTA for educational analytics:`,
+    ptaConsentBody: (school) => `Thank you for using AceSpeller. To provide better services, the following data may be provided to <strong>Holy Angels Canossian School</strong> for educational analytics:`,
     ptaConsentItems: ['Login activity (login count and last active date)', 'Number of dictation sessions', 'Subscription status and expiry'],
-    ptaConsentNote: 'The above data is used solely for PTA learning progress assessment and will not be shared externally or used for commercial purposes.',
     ptaConsentCheckbox: 'I have read the above and consent to sharing my data with the school and PTA.',
     ptaConsentAgree: 'Agree & Continue',
     ptaConsentCancel: 'Cancel',
@@ -378,7 +375,6 @@ function showPtaConsentModal(school) {
       </div>
       <p style="font-size:14px;margin-bottom:8px;color: black;">${t.ptaConsentBody(school)}</p>
       <ul style="font-size:14px;margin:8px 0 12px 16px;padding:0;color: black;">${itemsHtml}</ul>
-      <p style="font-size:13px;color:#666;margin-bottom:16px">${t.ptaConsentNote}</p>
       <label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;margin-bottom:20px;">
         <input type="checkbox" id="pta-consent-checkbox" style="margin-top:3px;flex-shrink:0">
         <span style="color: black;font-size:13px">${t.ptaConsentCheckbox}</span>
