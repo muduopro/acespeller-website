@@ -373,17 +373,17 @@ function showPtaConsentModal(school) {
     modal.innerHTML = `
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
         <span style="font-size:24px">🏫</span>
-        <strong style="font-size:17px">${t.ptaConsentTitle}</strong>
+        <strong style="font-size:17px;color: black;">${t.ptaConsentTitle}</strong>
       </div>
-      <p style="font-size:14px;margin-bottom:8px">${t.ptaConsentBody(school)}</p>
-      <ul style="font-size:14px;margin:8px 0 12px 16px;padding:0">${itemsHtml}</ul>
+      <p style="font-size:14px;margin-bottom:8px;color: black;">${t.ptaConsentBody(school)}</p>
+      <ul style="font-size:14px;margin:8px 0 12px 16px;padding:0;color: black;">${itemsHtml}</ul>
       <p style="font-size:13px;color:#666;margin-bottom:16px">${t.ptaConsentNote}</p>
-      <label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;margin-bottom:20px">
+      <label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;margin-bottom:20px;">
         <input type="checkbox" id="pta-consent-checkbox" style="margin-top:3px;flex-shrink:0">
-        <span style="font-size:13px">${t.ptaConsentCheckbox}</span>
+        <span style="color: black;font-size:13px">${t.ptaConsentCheckbox}</span>
       </label>
       <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button id="pta-cancel-btn" style="padding:8px 16px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#333;cursor:pointer;font-size:14px">
+        <button id="pta-cancel-btn" style="color: black;padding:8px 16px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#333;cursor:pointer;font-size:14px">
           ${t.ptaConsentCancel}
         </button>
         <button id="pta-agree-btn" disabled style="padding:8px 20px;border:none;border-radius:8px;background:#3B82F6;color:#fff;cursor:pointer;font-size:14px;opacity:0.5">
@@ -486,24 +486,24 @@ redeemForm.addEventListener('submit', async (e) => {
           codeInput.value = '';
           break;
         }
-        case 'not_found':      showResult('error', t.errNotFound); break;
-        case 'expired':        showResult('error', t.errExpired); break;
-        case 'limit_reached':  showResult('error', t.errLimitReached); break;
+        case 'not_found': showResult('error', t.errNotFound); break;
+        case 'expired': showResult('error', t.errExpired); break;
+        case 'limit_reached': showResult('error', t.errLimitReached); break;
         case 'already_redeemed': showResult('error', t.errAlreadyRedeemed); break;
-        case 'downgrade':      showResult('error', t.errDowngrade); break;
+        case 'downgrade': showResult('error', t.errDowngrade); break;
         case 'school_mismatch': showResult('error', t.errSchoolMismatch); break;
-        default:               showResult('error', t.errGeneric);
+        default: showResult('error', t.errGeneric);
       }
     }
   } catch (err) {
     console.error('Redeem error:', err);
     const msg = err.message;
     const t = i18n[currentLang];
-    if (msg === 'not_found')       showResult('error', t.errNotFound);
-    else if (msg === 'expired')    showResult('error', t.errExpired);
+    if (msg === 'not_found') showResult('error', t.errNotFound);
+    else if (msg === 'expired') showResult('error', t.errExpired);
     else if (msg === 'limit_reached') showResult('error', t.errLimitReached);
     else if (msg === 'already_claimed') showResult('error', t.errAlreadyRedeemed);
-    else                           showResult('error', t.errGeneric);
+    else showResult('error', t.errGeneric);
   } finally {
     setLoading(false);
   }
