@@ -364,7 +364,7 @@ function showPtaConsentModal(school) {
 
     const modal = document.createElement('div');
     modal.style.cssText = `
-      background:#fff;border-radius:16px;padding:24px;max-width:480px;width:100%;
+      background:#fff;color:#1a1a1a;border-radius:16px;padding:24px;max-width:480px;width:100%;
       box-shadow:0 8px 32px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;
     `;
 
@@ -383,7 +383,7 @@ function showPtaConsentModal(school) {
         <span style="font-size:13px">${t.ptaConsentCheckbox}</span>
       </label>
       <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button id="pta-cancel-btn" style="padding:8px 16px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;font-size:14px">
+        <button id="pta-cancel-btn" style="padding:8px 16px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#333;cursor:pointer;font-size:14px">
           ${t.ptaConsentCancel}
         </button>
         <button id="pta-agree-btn" disabled style="padding:8px 20px;border:none;border-radius:8px;background:#3B82F6;color:#fff;cursor:pointer;font-size:14px;opacity:0.5">
