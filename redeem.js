@@ -284,10 +284,9 @@ async function redeemSubscriptionCode(userId, codeId) {
       redemptionCodeUsed: codeId,
       lastUpdated: serverTimestamp(),
     };
-    // PTA: 寫入 schoolInfo + ptaConsentAt
+    // PTA: 寫入 schoolInfo
     if (codeSchool) {
       userUpdate.schoolInfo = { school: codeSchool, ...(codeBatchYear ? { batchYear: codeBatchYear } : {}) };
-      userUpdate.ptaConsentAt = serverTimestamp();
     }
 
     tx.set(userRef, userUpdate, { merge: true });
@@ -465,15 +464,6 @@ redeemForm.addEventListener('submit', async (e) => {
       showResult('success', t.successCoins(coins));
       codeInput.value = '';
     } else {
-      // PTA 學校合約：若碼含 school 欄位，先顯示資料共享同意書
-      const codeSchool = codeData.school;
-      if (codeSchool) {
-        setLoading(false);
-        const consented = await showPtaConsentModal(codeSchool);
-        if (!consented) return; // 用戶取消，不繼續兌換
-        setLoading(true);
-      }
-
       // 訂閱方案兌換碼
       const res = await redeemSubscriptionCode(currentUser.uid, rawCode);
       switch (res.result) {
