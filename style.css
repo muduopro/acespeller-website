@@ -917,6 +917,103 @@ details p {
   }
 }
 
+/* ===== PRICING SECTION ===== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 760px;
+  margin: 0 auto 32px;
+}
+
+.pricing-card {
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  position: relative;
+}
+
+.pricing-card-plus {
+  border-color: rgba(255, 167, 38, 0.45);
+  background: linear-gradient(145deg, rgba(255,167,38,0.07), rgba(26,5,51,0.5));
+  box-shadow: 0 0 40px rgba(255,167,38,0.12);
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: #1a0533;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 5px 16px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.pricing-tier {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.pricing-card-plus .pricing-tier {
+  color: var(--gold);
+}
+
+.pricing-price {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text-white);
+  margin-bottom: 24px;
+}
+
+.pricing-card-plus .pricing-price {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  flex: 1;
+}
+
+.pricing-features li {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.5;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.pricing-features li:last-child {
+  border-bottom: none;
+}
+
+.pricing-btn {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.pricing-school-note {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
 /* 小螢幕手機 (≤480px) */
 @media (max-width: 480px) {
   .hero-btns {

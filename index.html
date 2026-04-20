@@ -32,6 +32,94 @@
   <meta name="twitter:image" content="https://acespeller.com.hk/og-image.png" />
   <meta name="twitter:image:alt" content="AceSpeller 默書100分 - AI 智能默書神器" />
 
+  <!-- ===== hreflang（多語言 SEO） ===== -->
+  <link rel="alternate" hreflang="zh-HK"    href="https://acespeller.com.hk/" />
+  <link rel="alternate" hreflang="zh-CN"    href="https://acespeller.com.hk/" />
+  <link rel="alternate" hreflang="en"       href="https://acespeller.com.hk/" />
+  <link rel="alternate" hreflang="x-default" href="https://acespeller.com.hk/" />
+
+  <!-- ===== JSON-LD FAQ Schema（讓 Google 搜尋結果顯示 FAQ 摺疊） ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "AceSpeller 默書100分是免費的嗎？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "是的！核心的拍照辨識與雙語默書功能完全免費。另有進階的 Plus 方案提供雲端同步、無限次數與更多 AI 功能。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AceSpeller 支援哪些語言的默書？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "完整支援中文（廣東話及普通話 AI 標準發音）及英文默書，完美對接香港小學學習需求。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AceSpeller 照片辨識準確率高嗎？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "採用頂尖 AI 雲端文字辨識技術，針對繁體中文與列印字體優化，準確率極高。辨識有誤可隨時手動修改。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AceSpeller 有什麼特別功能？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "AceSpeller 擁有轉蛋機收藏系統、成就勳章、Flashcard 溫習、拼字遊戲、AI 智能出題、AI 口說練習及每日默書挑戰等豐富功能，讓孩子主動學習。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ===== JSON-LD 結構化數據（MobileApplication Rich Snippet） ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "AceSpeller 默書100分",
+    "alternateName": ["AceSpeller", "默書100分", "默書 App"],
+    "description": "專為香港學生設計的 AI 默書輔助 App。獨家拍照一秒匯入學校默書表，支援粵普雙語標準 AI 發音，結合遊戲化獎勵機制，讓孩子主動練習中英文默書。",
+    "applicationCategory": "EducationApplication",
+    "operatingSystem": "iOS, Android",
+    "inLanguage": ["zh-HK", "zh-CN", "en"],
+    "url": "https://acespeller.com.hk/",
+    "downloadUrl": "https://acespeller.com.hk/download",
+    "installUrl": "https://acespeller.com.hk/download",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "HKD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "MuduoPro Limited",
+      "url": "https://acespeller.com.hk/"
+    },
+    "screenshot": "https://acespeller.com.hk/og-image.png",
+    "featureList": [
+      "AI 拍照辨識默書表",
+      "粵語 AI 標準發音",
+      "普通話 AI 標準發音",
+      "英文 AI 發音",
+      "遊戲化獎勵機制",
+      "轉蛋收藏系統",
+      "成就勳章",
+      "學習統計分析",
+      "Flashcard 溫習",
+      "每日默書挑戰"
+    ]
+  }
+  </script>
+
   <!-- ===== 圖示 ===== -->
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="apple-touch-icon" href="/logo.png" />
@@ -53,6 +141,31 @@
 
   <!-- Main Content -->
   <main id="app"></main>
+
+  <!--
+    noscript 靜態內容：讓 Google 抓蟲在執行 JS 前也能讀取關鍵文字。
+    對用戶不可見（JS 載入後 #app 會覆蓋），但對 SEO 至關重要。
+  -->
+  <noscript>
+    <section>
+      <h1>AceSpeller 默書100分 — 讓學生愛上默書的終極神器</h1>
+      <p>專為香港學生設計的 AI 默書輔助 App。獨家 AI 拍照辨識，一秒匯入學校默書表。支援粵普雙語標準發音，結合遊戲化獎勵機制，讓家長輕鬆退居幕後，孩子主動學習！</p>
+      <ul>
+        <li><strong>AI 拍照匯入</strong>：拍一張默書表照片，自動辨識所有生字和句子，無需手動輸入</li>
+        <li><strong>粵普英三語發音</strong>：Azure AI 語音引擎，粵語、普通話、英語標準發音</li>
+        <li><strong>遊戲化獎勵</strong>：轉蛋機、成就勳章、AceCoins 獎勵系統，讓孩子主動練習</li>
+        <li><strong>AI 智能出題</strong>：AI 根據年級和主題自動生成默書練習題目</li>
+        <li><strong>學習統計</strong>：追蹤每次默書成績，分析常錯字詞</li>
+        <li><strong>每日挑戰</strong>：每日默書挑戰，保持學習動力</li>
+        <li><strong>Flashcard 溫習</strong>：生字 Flashcard，隨時隨地鞏固記憶</li>
+      </ul>
+      <h2>適合對象</h2>
+      <p>香港小學生、中學生、家長、老師。支援中文默書（廣東話/普通話）及英文默書練習。</p>
+      <h2>免費下載</h2>
+      <p><a href="https://apple.co/47kzZUF">App Store (iOS) 下載 AceSpeller</a></p>
+      <p><a href="https://play.google.com/store/apps/details?id=com.muduopro.dictationHelper">Google Play (Android) 下載 AceSpeller</a></p>
+    </section>
+  </noscript>
 
   <!-- Footer -->
   <footer id="footer"></footer>

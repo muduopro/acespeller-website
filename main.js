@@ -242,6 +242,56 @@ function renderApp() {
     </section>
     -->
 
+    <!-- ===== PRICING ===== -->
+    <section id="pricing" class="pricing-section section" aria-label="方案比較">
+      <div class="container">
+        <div class="text-center" style="margin-bottom:48px;">
+          <div class="section-tag">💎 Pricing</div>
+          <h2 data-i18n="pricing_title"></h2>
+          <p style="max-width:520px; margin:12px auto 0;" data-i18n="pricing_subtitle"></p>
+        </div>
+
+        <div class="pricing-grid">
+
+          <!-- Free Card -->
+          <div class="glass-card pricing-card reveal">
+            <div class="pricing-tier" data-i18n="pricing_free"></div>
+            <div class="pricing-price" data-i18n="pricing_free_price"></div>
+            <ul class="pricing-features">
+              <li data-i18n="pricing_free_f1"></li>
+              <li data-i18n="pricing_free_f2"></li>
+              <li data-i18n="pricing_free_f3"></li>
+              <li data-i18n="pricing_free_f4"></li>
+              <li data-i18n="pricing_free_f5"></li>
+              <li data-i18n="pricing_free_f6"></li>
+              <li data-i18n="pricing_free_f7"></li>
+            </ul>
+            <a href="https://apple.co/47kzZUF" target="_blank" rel="noopener noreferrer" class="btn btn-outline pricing-btn" data-i18n="pricing_free_cta"></a>
+          </div>
+
+          <!-- Plus Card -->
+          <div class="glass-card pricing-card pricing-card-plus reveal reveal-delay-1">
+            <div class="pricing-badge">✨ Most Popular</div>
+            <div class="pricing-tier" data-i18n="pricing_plus"></div>
+            <div class="pricing-price" data-i18n="pricing_plus_price"></div>
+            <ul class="pricing-features">
+              <li data-i18n="pricing_plus_f1"></li>
+              <li data-i18n="pricing_plus_f2"></li>
+              <li data-i18n="pricing_plus_f3"></li>
+              <li data-i18n="pricing_plus_f4"></li>
+              <li data-i18n="pricing_plus_f5"></li>
+              <li data-i18n="pricing_plus_f6"></li>
+              <li data-i18n="pricing_plus_f7"></li>
+            </ul>
+            <a href="/upgrade" class="btn btn-primary pricing-btn" data-i18n="pricing_plus_cta"></a>
+          </div>
+
+        </div>
+
+        <p class="pricing-school-note" data-i18n="pricing_school"></p>
+      </div>
+    </section>
+
     <!-- ===== FAQ ===== -->
     <section class="faq-section section" aria-label="常見問題">
       <div class="container" style="max-width: 780px;">
