@@ -105,13 +105,90 @@
     }
     .blog-p { color: var(--text-light); line-height: 1.85; margin-bottom: 16px; }
 
-    /* Grade section */
+    /* ── Sticky Controls Bar ── */
+    .word-controls {
+      position: sticky;
+      top: 56px; /* height of shared-nav */
+      z-index: 90;
+      background: rgba(8, 6, 26, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .grade-tabs {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .grade-tab {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-pill);
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+    .grade-tab:hover { border-color: rgba(255,215,0,0.35); color: var(--gold); }
+    .grade-tab.active {
+      background: rgba(255, 215, 0, 0.14);
+      border-color: rgba(255, 215, 0, 0.45);
+      color: var(--gold);
+    }
+
+    .lang-toggle {
+      background: rgba(78, 205, 196, 0.08);
+      border: 1px solid rgba(78, 205, 196, 0.35);
+      border-radius: var(--radius-pill);
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #4ecdc4;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+    .lang-toggle:hover { background: rgba(78, 205, 196, 0.15); }
+    .lang-toggle.mandarin {
+      background: rgba(255, 149, 96, 0.08);
+      border-color: rgba(255, 149, 96, 0.35);
+      color: #ff9560;
+    }
+    .lang-toggle.mandarin:hover { background: rgba(255, 149, 96, 0.15); }
+
+    /* TTS not supported warning */
+    .tts-unsupported {
+      display: none;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 6px 0 0;
+      width: 100%;
+    }
+
+    /* ── Grade section ── */
     .grade-section {
       background: var(--glass-bg); border: 1px solid var(--glass-border);
       border-radius: var(--radius-md); padding: 24px; margin: 24px 0;
+      scroll-margin-top: 110px; /* nav + controls height */
     }
     .grade-header {
       display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+      flex-wrap: wrap;
     }
     .grade-badge {
       background: linear-gradient(135deg, var(--gold-dark), var(--gold));
@@ -122,16 +199,78 @@
     .grade-title { font-size: 1rem; font-weight: 700; color: var(--text-white); }
     .grade-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
 
+    .grade-play-btn {
+      background: rgba(255, 215, 0, 0.08);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: var(--radius-pill);
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-left: auto;
+      flex-shrink: 0;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+    .grade-play-btn:hover { background: rgba(255,215,0,0.18); }
+    .grade-play-btn.playing {
+      background: rgba(255, 90, 90, 0.1);
+      border-color: rgba(255, 90, 90, 0.4);
+      color: #ff7070;
+    }
+
     .word-grid {
       display: flex; flex-wrap: wrap; gap: 8px;
     }
+
+    /* ── Word Chip — Interactive Button ── */
     .word-chip {
-      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-      border-radius: var(--radius-sm); padding: 5px 12px;
-      font-size: 0.9rem; color: var(--text-light);
-      cursor: default;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-sm);
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: border-color 0.18s, color 0.18s, transform 0.18s, background 0.18s, box-shadow 0.18s;
+      font-family: inherit;
+      user-select: none;
+      -webkit-user-select: none;
+      position: relative;
     }
-    .word-chip:hover { border-color: rgba(255,215,0,0.4); color: var(--gold); }
+    .word-chip:hover {
+      border-color: rgba(255, 215, 0, 0.45);
+      color: var(--gold);
+      transform: translateY(-1px);
+    }
+    .word-chip:active { transform: scale(0.96); }
+
+    /* Playing state — pulsing gold */
+    .word-chip.playing {
+      background: rgba(255, 215, 0, 0.16);
+      border-color: var(--gold);
+      color: var(--gold);
+      animation: chip-pulse 0.7s ease-in-out infinite;
+    }
+    @keyframes chip-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,215,0,0); }
+      50%       { transform: scale(1.06); box-shadow: 0 0 10px rgba(255,215,0,0.35); }
+    }
+
+    /* Listened state — soft teal */
+    .word-chip.listened {
+      background: rgba(78, 205, 196, 0.07);
+      border-color: rgba(78, 205, 196, 0.28);
+      color: #4ecdc4;
+    }
+    .word-chip.listened:hover {
+      background: rgba(78, 205, 196, 0.14);
+      border-color: rgba(78, 205, 196, 0.5);
+      color: #4ecdc4;
+      transform: translateY(-1px);
+    }
 
     .section-note {
       font-size: 0.8rem; color: var(--text-muted); margin-top: 12px;
@@ -175,7 +314,11 @@
     .related-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--text-white); margin: 0; }
 
     @media (max-width: 600px) {
-      .word-chip { font-size: 0.85rem; padding: 4px 10px; }
+      .word-chip { font-size: 0.85rem; padding: 5px 10px; }
+      .word-controls { padding: 8px 16px; gap: 8px; }
+      .grade-tab { padding: 4px 10px; font-size: 0.75rem; }
+      .lang-toggle { padding: 4px 10px; font-size: 0.75rem; }
+      .grade-play-btn { padding: 4px 10px; font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -193,6 +336,20 @@
     <a href="/download" class="shared-nav-cta">免費下載</a>
   </div>
 </nav>
+
+<!-- ── Sticky Learning Controls ── -->
+<div class="word-controls" id="word-controls">
+  <div class="grade-tabs" role="tablist" aria-label="年級篩選">
+    <button type="button" class="grade-tab active" data-grade="grade-p1" role="tab">P1</button>
+    <button type="button" class="grade-tab" data-grade="grade-p2" role="tab">P2</button>
+    <button type="button" class="grade-tab" data-grade="grade-p3" role="tab">P3</button>
+    <button type="button" class="grade-tab" data-grade="grade-p4" role="tab">P4</button>
+    <button type="button" class="grade-tab" data-grade="grade-p5" role="tab">P5</button>
+    <button type="button" class="grade-tab" data-grade="grade-p6" role="tab">P6</button>
+  </div>
+  <button type="button" class="lang-toggle" id="lang-btn" title="切換粵語／普通話發音">🔊 粵語</button>
+  <p class="tts-unsupported" id="tts-unsupported">⚠️ 你的瀏覽器不支援語音功能，建議使用 Chrome 或 Safari</p>
+</div>
 
 <!-- Main Content -->
 <main class="blog-wrap">
@@ -215,7 +372,7 @@
 
   <!-- Lead -->
   <p class="blog-lead">
-    本頁整理香港小學中文默書各年級常見詞彙，供家長和孩子作日常練習參考。請注意，各學校的實際默書內容以老師發出的默書表為準，本列表僅供一般參考。搭配 AceSpeller AI 默書 App，可將任何生字直接匯入練習，無需手動輸入。
+    本頁整理香港小學中文默書各年級常見詞彙，供家長和孩子作日常練習參考。<strong style="color:var(--gold)">點擊任何詞語即可聆聽發音</strong>，支援粵語和普通話切換。請注意，各學校的實際默書內容以老師發出的默書表為準，本列表僅供一般參考。
   </p>
 
   <!-- Disclaimer -->
@@ -225,153 +382,286 @@
 
   <!-- P1 -->
   <h2 class="blog-h2">小學一年級（P1）常見默書詞彙</h2>
-  <div class="grade-section">
+  <div class="grade-section" id="grade-p1">
     <div class="grade-header">
       <span class="grade-badge">P1</span>
       <div>
         <div class="grade-title">基礎認字期</div>
         <div class="grade-subtitle">以常用基本字為主，結合日常生活詞彙</div>
       </div>
+      <button type="button" class="grade-play-btn" data-target="grade-p1">▶ 全部播放</button>
     </div>
     <div class="word-grid">
-      <span class="word-chip">人</span><span class="word-chip">大</span><span class="word-chip">小</span>
-      <span class="word-chip">山</span><span class="word-chip">水</span><span class="word-chip">火</span>
-      <span class="word-chip">日</span><span class="word-chip">月</span><span class="word-chip">木</span>
-      <span class="word-chip">花</span><span class="word-chip">手</span><span class="word-chip">口</span>
-      <span class="word-chip">耳</span><span class="word-chip">目</span><span class="word-chip">上</span>
-      <span class="word-chip">下</span><span class="word-chip">中</span><span class="word-chip">天</span>
-      <span class="word-chip">地</span><span class="word-chip">王</span><span class="word-chip">父</span>
-      <span class="word-chip">母</span><span class="word-chip">子</span><span class="word-chip">女</span>
-      <span class="word-chip">牛</span><span class="word-chip">羊</span><span class="word-chip">魚</span>
-      <span class="word-chip">鳥</span><span class="word-chip">白</span><span class="word-chip">黑</span>
-      <span class="word-chip">紅</span><span class="word-chip">朋友</span><span class="word-chip">爸爸</span>
-      <span class="word-chip">媽媽</span><span class="word-chip">老師</span><span class="word-chip">學校</span>
+      <button type="button" class="word-chip" data-word="人">人</button>
+      <button type="button" class="word-chip" data-word="大">大</button>
+      <button type="button" class="word-chip" data-word="小">小</button>
+      <button type="button" class="word-chip" data-word="山">山</button>
+      <button type="button" class="word-chip" data-word="水">水</button>
+      <button type="button" class="word-chip" data-word="火">火</button>
+      <button type="button" class="word-chip" data-word="日">日</button>
+      <button type="button" class="word-chip" data-word="月">月</button>
+      <button type="button" class="word-chip" data-word="木">木</button>
+      <button type="button" class="word-chip" data-word="花">花</button>
+      <button type="button" class="word-chip" data-word="手">手</button>
+      <button type="button" class="word-chip" data-word="口">口</button>
+      <button type="button" class="word-chip" data-word="耳">耳</button>
+      <button type="button" class="word-chip" data-word="目">目</button>
+      <button type="button" class="word-chip" data-word="上">上</button>
+      <button type="button" class="word-chip" data-word="下">下</button>
+      <button type="button" class="word-chip" data-word="中">中</button>
+      <button type="button" class="word-chip" data-word="天">天</button>
+      <button type="button" class="word-chip" data-word="地">地</button>
+      <button type="button" class="word-chip" data-word="王">王</button>
+      <button type="button" class="word-chip" data-word="父">父</button>
+      <button type="button" class="word-chip" data-word="母">母</button>
+      <button type="button" class="word-chip" data-word="子">子</button>
+      <button type="button" class="word-chip" data-word="女">女</button>
+      <button type="button" class="word-chip" data-word="牛">牛</button>
+      <button type="button" class="word-chip" data-word="羊">羊</button>
+      <button type="button" class="word-chip" data-word="魚">魚</button>
+      <button type="button" class="word-chip" data-word="鳥">鳥</button>
+      <button type="button" class="word-chip" data-word="白">白</button>
+      <button type="button" class="word-chip" data-word="黑">黑</button>
+      <button type="button" class="word-chip" data-word="紅">紅</button>
+      <button type="button" class="word-chip" data-word="朋友">朋友</button>
+      <button type="button" class="word-chip" data-word="爸爸">爸爸</button>
+      <button type="button" class="word-chip" data-word="媽媽">媽媽</button>
+      <button type="button" class="word-chip" data-word="老師">老師</button>
+      <button type="button" class="word-chip" data-word="學校">學校</button>
     </div>
     <p class="section-note">P1 以單字認讀為主，詞語理解次之，重點是正確筆劃順序。</p>
   </div>
 
   <!-- P2 -->
   <h2 class="blog-h2">小學二年級（P2）常見默書詞彙</h2>
-  <div class="grade-section">
+  <div class="grade-section" id="grade-p2">
     <div class="grade-header">
       <span class="grade-badge">P2</span>
       <div>
         <div class="grade-title">詞語擴展期</div>
         <div class="grade-subtitle">從單字進入雙字詞，加入基本動詞、形容詞</div>
       </div>
+      <button type="button" class="grade-play-btn" data-target="grade-p2">▶ 全部播放</button>
     </div>
     <div class="word-grid">
-      <span class="word-chip">天空</span><span class="word-chip">白雲</span><span class="word-chip">下雨</span>
-      <span class="word-chip">小鳥</span><span class="word-chip">樹木</span><span class="word-chip">花草</span>
-      <span class="word-chip">快樂</span><span class="word-chip">高興</span><span class="word-chip">一起</span>
-      <span class="word-chip">早上</span><span class="word-chip">晚上</span><span class="word-chip">今天</span>
-      <span class="word-chip">明天</span><span class="word-chip">昨天</span><span class="word-chip">功課</span>
-      <span class="word-chip">同學</span><span class="word-chip">讀書</span><span class="word-chip">寫字</span>
-      <span class="word-chip">吃飯</span><span class="word-chip">睡覺</span><span class="word-chip">玩耍</span>
-      <span class="word-chip">家人</span><span class="word-chip">哥哥</span><span class="word-chip">姐姐</span>
-      <span class="word-chip">弟弟</span><span class="word-chip">妹妹</span><span class="word-chip">喜歡</span>
-      <span class="word-chip">可以</span><span class="word-chip">漂亮</span><span class="word-chip">乾淨</span>
+      <button type="button" class="word-chip" data-word="天空">天空</button>
+      <button type="button" class="word-chip" data-word="白雲">白雲</button>
+      <button type="button" class="word-chip" data-word="下雨">下雨</button>
+      <button type="button" class="word-chip" data-word="小鳥">小鳥</button>
+      <button type="button" class="word-chip" data-word="樹木">樹木</button>
+      <button type="button" class="word-chip" data-word="花草">花草</button>
+      <button type="button" class="word-chip" data-word="快樂">快樂</button>
+      <button type="button" class="word-chip" data-word="高興">高興</button>
+      <button type="button" class="word-chip" data-word="一起">一起</button>
+      <button type="button" class="word-chip" data-word="早上">早上</button>
+      <button type="button" class="word-chip" data-word="晚上">晚上</button>
+      <button type="button" class="word-chip" data-word="今天">今天</button>
+      <button type="button" class="word-chip" data-word="明天">明天</button>
+      <button type="button" class="word-chip" data-word="昨天">昨天</button>
+      <button type="button" class="word-chip" data-word="功課">功課</button>
+      <button type="button" class="word-chip" data-word="同學">同學</button>
+      <button type="button" class="word-chip" data-word="讀書">讀書</button>
+      <button type="button" class="word-chip" data-word="寫字">寫字</button>
+      <button type="button" class="word-chip" data-word="吃飯">吃飯</button>
+      <button type="button" class="word-chip" data-word="睡覺">睡覺</button>
+      <button type="button" class="word-chip" data-word="玩耍">玩耍</button>
+      <button type="button" class="word-chip" data-word="家人">家人</button>
+      <button type="button" class="word-chip" data-word="哥哥">哥哥</button>
+      <button type="button" class="word-chip" data-word="姐姐">姐姐</button>
+      <button type="button" class="word-chip" data-word="弟弟">弟弟</button>
+      <button type="button" class="word-chip" data-word="妹妹">妹妹</button>
+      <button type="button" class="word-chip" data-word="喜歡">喜歡</button>
+      <button type="button" class="word-chip" data-word="可以">可以</button>
+      <button type="button" class="word-chip" data-word="漂亮">漂亮</button>
+      <button type="button" class="word-chip" data-word="乾淨">乾淨</button>
     </div>
     <p class="section-note">P2 開始有句子默書，通常是 5-8 字的簡單句。</p>
   </div>
 
   <!-- P3 -->
   <h2 class="blog-h2">小學三年級（P3）常見默書詞彙</h2>
-  <div class="grade-section">
+  <div class="grade-section" id="grade-p3">
     <div class="grade-header">
       <span class="grade-badge">P3</span>
       <div>
         <div class="grade-title">語境應用期</div>
         <div class="grade-subtitle">詞語更豐富，句子增長，題材涵蓋日常及自然</div>
       </div>
+      <button type="button" class="grade-play-btn" data-target="grade-p3">▶ 全部播放</button>
     </div>
     <div class="word-grid">
-      <span class="word-chip">環境</span><span class="word-chip">保護</span><span class="word-chip">大自然</span>
-      <span class="word-chip">動物</span><span class="word-chip">植物</span><span class="word-chip">季節</span>
-      <span class="word-chip">春天</span><span class="word-chip">夏天</span><span class="word-chip">秋天</span>
-      <span class="word-chip">冬天</span><span class="word-chip">溫暖</span><span class="word-chip">涼爽</span>
-      <span class="word-chip">認真</span><span class="word-chip">努力</span><span class="word-chip">勤奮</span>
-      <span class="word-chip">幫助</span><span class="word-chip">感謝</span><span class="word-chip">禮貌</span>
-      <span class="word-chip">交通</span><span class="word-chip">地鐵</span><span class="word-chip">巴士</span>
-      <span class="word-chip">超市</span><span class="word-chip">醫院</span><span class="word-chip">郵局</span>
-      <span class="word-chip">整齊</span><span class="word-chip">整潔</span><span class="word-chip">負責</span>
-      <span class="word-chip">體育</span><span class="word-chip">音樂</span><span class="word-chip">美術</span>
-      <span class="word-chip">愉快</span><span class="word-chip">心情</span><span class="word-chip">難過</span>
+      <button type="button" class="word-chip" data-word="環境">環境</button>
+      <button type="button" class="word-chip" data-word="保護">保護</button>
+      <button type="button" class="word-chip" data-word="大自然">大自然</button>
+      <button type="button" class="word-chip" data-word="動物">動物</button>
+      <button type="button" class="word-chip" data-word="植物">植物</button>
+      <button type="button" class="word-chip" data-word="季節">季節</button>
+      <button type="button" class="word-chip" data-word="春天">春天</button>
+      <button type="button" class="word-chip" data-word="夏天">夏天</button>
+      <button type="button" class="word-chip" data-word="秋天">秋天</button>
+      <button type="button" class="word-chip" data-word="冬天">冬天</button>
+      <button type="button" class="word-chip" data-word="溫暖">溫暖</button>
+      <button type="button" class="word-chip" data-word="涼爽">涼爽</button>
+      <button type="button" class="word-chip" data-word="認真">認真</button>
+      <button type="button" class="word-chip" data-word="努力">努力</button>
+      <button type="button" class="word-chip" data-word="勤奮">勤奮</button>
+      <button type="button" class="word-chip" data-word="幫助">幫助</button>
+      <button type="button" class="word-chip" data-word="感謝">感謝</button>
+      <button type="button" class="word-chip" data-word="禮貌">禮貌</button>
+      <button type="button" class="word-chip" data-word="交通">交通</button>
+      <button type="button" class="word-chip" data-word="地鐵">地鐵</button>
+      <button type="button" class="word-chip" data-word="巴士">巴士</button>
+      <button type="button" class="word-chip" data-word="超市">超市</button>
+      <button type="button" class="word-chip" data-word="醫院">醫院</button>
+      <button type="button" class="word-chip" data-word="郵局">郵局</button>
+      <button type="button" class="word-chip" data-word="整齊">整齊</button>
+      <button type="button" class="word-chip" data-word="整潔">整潔</button>
+      <button type="button" class="word-chip" data-word="負責">負責</button>
+      <button type="button" class="word-chip" data-word="體育">體育</button>
+      <button type="button" class="word-chip" data-word="音樂">音樂</button>
+      <button type="button" class="word-chip" data-word="美術">美術</button>
+      <button type="button" class="word-chip" data-word="愉快">愉快</button>
+      <button type="button" class="word-chip" data-word="心情">心情</button>
+      <button type="button" class="word-chip" data-word="難過">難過</button>
     </div>
   </div>
 
   <!-- P4 -->
   <h2 class="blog-h2">小學四年級（P4）常見默書詞彙</h2>
-  <div class="grade-section">
+  <div class="grade-section" id="grade-p4">
     <div class="grade-header">
       <span class="grade-badge">P4</span>
       <div>
         <div class="grade-title">深化理解期</div>
         <div class="grade-subtitle">引入較複雜詞語，句子加入修飾語</div>
       </div>
+      <button type="button" class="grade-play-btn" data-target="grade-p4">▶ 全部播放</button>
     </div>
     <div class="word-grid">
-      <span class="word-chip">珍貴</span><span class="word-chip">資源</span><span class="word-chip">節省</span>
-      <span class="word-chip">浪費</span><span class="word-chip">污染</span><span class="word-chip">回收</span>
-      <span class="word-chip">文化</span><span class="word-chip">傳統</span><span class="word-chip">節日</span>
-      <span class="word-chip">中秋</span><span class="word-chip">農曆</span><span class="word-chip">習俗</span>
-      <span class="word-chip">祖先</span><span class="word-chip">精神</span><span class="word-chip">品格</span>
-      <span class="word-chip">誠實</span><span class="word-chip">勇敢</span><span class="word-chip">堅持</span>
-      <span class="word-chip">挑戰</span><span class="word-chip">克服</span><span class="word-chip">成功</span>
-      <span class="word-chip">科技</span><span class="word-chip">電腦</span><span class="word-chip">互聯網</span>
-      <span class="word-chip">閱讀</span><span class="word-chip">思考</span><span class="word-chip">創意</span>
-      <span class="word-chip">合作</span><span class="word-chip">溝通</span><span class="word-chip">尊重</span>
+      <button type="button" class="word-chip" data-word="珍貴">珍貴</button>
+      <button type="button" class="word-chip" data-word="資源">資源</button>
+      <button type="button" class="word-chip" data-word="節省">節省</button>
+      <button type="button" class="word-chip" data-word="浪費">浪費</button>
+      <button type="button" class="word-chip" data-word="污染">污染</button>
+      <button type="button" class="word-chip" data-word="回收">回收</button>
+      <button type="button" class="word-chip" data-word="文化">文化</button>
+      <button type="button" class="word-chip" data-word="傳統">傳統</button>
+      <button type="button" class="word-chip" data-word="節日">節日</button>
+      <button type="button" class="word-chip" data-word="中秋">中秋</button>
+      <button type="button" class="word-chip" data-word="農曆">農曆</button>
+      <button type="button" class="word-chip" data-word="習俗">習俗</button>
+      <button type="button" class="word-chip" data-word="祖先">祖先</button>
+      <button type="button" class="word-chip" data-word="精神">精神</button>
+      <button type="button" class="word-chip" data-word="品格">品格</button>
+      <button type="button" class="word-chip" data-word="誠實">誠實</button>
+      <button type="button" class="word-chip" data-word="勇敢">勇敢</button>
+      <button type="button" class="word-chip" data-word="堅持">堅持</button>
+      <button type="button" class="word-chip" data-word="挑戰">挑戰</button>
+      <button type="button" class="word-chip" data-word="克服">克服</button>
+      <button type="button" class="word-chip" data-word="成功">成功</button>
+      <button type="button" class="word-chip" data-word="科技">科技</button>
+      <button type="button" class="word-chip" data-word="電腦">電腦</button>
+      <button type="button" class="word-chip" data-word="互聯網">互聯網</button>
+      <button type="button" class="word-chip" data-word="閱讀">閱讀</button>
+      <button type="button" class="word-chip" data-word="思考">思考</button>
+      <button type="button" class="word-chip" data-word="創意">創意</button>
+      <button type="button" class="word-chip" data-word="合作">合作</button>
+      <button type="button" class="word-chip" data-word="溝通">溝通</button>
+      <button type="button" class="word-chip" data-word="尊重">尊重</button>
     </div>
     <p class="section-note">P4 句子默書開始出現關聯詞，如「雖然⋯但是⋯」「因為⋯所以⋯」。</p>
   </div>
 
   <!-- P5 -->
   <h2 class="blog-h2">小學五年級（P5）常見默書詞彙</h2>
-  <div class="grade-section">
+  <div class="grade-section" id="grade-p5">
     <div class="grade-header">
       <span class="grade-badge">P5</span>
       <div>
         <div class="grade-title">詞彙豐富期</div>
         <div class="grade-subtitle">出現較多文學性詞語，形容詞豐富化</div>
       </div>
+      <button type="button" class="grade-play-btn" data-target="grade-p5">▶ 全部播放</button>
     </div>
     <div class="word-grid">
-      <span class="word-chip">壯觀</span><span class="word-chip">雄偉</span><span class="word-chip">巍峨</span>
-      <span class="word-chip">寬廣</span><span class="word-chip">遼闊</span><span class="word-chip">茂盛</span>
-      <span class="word-chip">蓬勃</span><span class="word-chip">繁榮</span><span class="word-chip">昌盛</span>
-      <span class="word-chip">責任</span><span class="word-chip">義務</span><span class="word-chip">貢獻</span>
-      <span class="word-chip">影響</span><span class="word-chip">改變</span><span class="word-chip">發展</span>
-      <span class="word-chip">歷史</span><span class="word-chip">文明</span><span class="word-chip">智慧</span>
-      <span class="word-chip">欣賞</span><span class="word-chip">感悟</span><span class="word-chip">體會</span>
-      <span class="word-chip">機遇</span><span class="word-chip">挑戰</span><span class="word-chip">目標</span>
-      <span class="word-chip">品德</span><span class="word-chip">修養</span><span class="word-chip">素質</span>
-      <span class="word-chip">關懷</span><span class="word-chip">體貼</span><span class="word-chip">包容</span>
-      <span class="word-chip">想像</span><span class="word-chip">創造</span><span class="word-chip">發明</span>
+      <button type="button" class="word-chip" data-word="壯觀">壯觀</button>
+      <button type="button" class="word-chip" data-word="雄偉">雄偉</button>
+      <button type="button" class="word-chip" data-word="巍峨">巍峨</button>
+      <button type="button" class="word-chip" data-word="寬廣">寬廣</button>
+      <button type="button" class="word-chip" data-word="遼闊">遼闊</button>
+      <button type="button" class="word-chip" data-word="茂盛">茂盛</button>
+      <button type="button" class="word-chip" data-word="蓬勃">蓬勃</button>
+      <button type="button" class="word-chip" data-word="繁榮">繁榮</button>
+      <button type="button" class="word-chip" data-word="昌盛">昌盛</button>
+      <button type="button" class="word-chip" data-word="責任">責任</button>
+      <button type="button" class="word-chip" data-word="義務">義務</button>
+      <button type="button" class="word-chip" data-word="貢獻">貢獻</button>
+      <button type="button" class="word-chip" data-word="影響">影響</button>
+      <button type="button" class="word-chip" data-word="改變">改變</button>
+      <button type="button" class="word-chip" data-word="發展">發展</button>
+      <button type="button" class="word-chip" data-word="歷史">歷史</button>
+      <button type="button" class="word-chip" data-word="文明">文明</button>
+      <button type="button" class="word-chip" data-word="智慧">智慧</button>
+      <button type="button" class="word-chip" data-word="欣賞">欣賞</button>
+      <button type="button" class="word-chip" data-word="感悟">感悟</button>
+      <button type="button" class="word-chip" data-word="體會">體會</button>
+      <button type="button" class="word-chip" data-word="機遇">機遇</button>
+      <button type="button" class="word-chip" data-word="挑戰">挑戰</button>
+      <button type="button" class="word-chip" data-word="目標">目標</button>
+      <button type="button" class="word-chip" data-word="品德">品德</button>
+      <button type="button" class="word-chip" data-word="修養">修養</button>
+      <button type="button" class="word-chip" data-word="素質">素質</button>
+      <button type="button" class="word-chip" data-word="關懷">關懷</button>
+      <button type="button" class="word-chip" data-word="體貼">體貼</button>
+      <button type="button" class="word-chip" data-word="包容">包容</button>
+      <button type="button" class="word-chip" data-word="想像">想像</button>
+      <button type="button" class="word-chip" data-word="創造">創造</button>
+      <button type="button" class="word-chip" data-word="發明">發明</button>
     </div>
   </div>
 
   <!-- P6 -->
   <h2 class="blog-h2">小學六年級（P6）常見默書詞彙</h2>
-  <div class="grade-section">
+  <div class="grade-section" id="grade-p6">
     <div class="grade-header">
       <span class="grade-badge">P6</span>
       <div>
         <div class="grade-title">升中銜接期</div>
         <div class="grade-subtitle">難度最高，出現四字詞，句子更長更複雜</div>
       </div>
+      <button type="button" class="grade-play-btn" data-target="grade-p6">▶ 全部播放</button>
     </div>
     <div class="word-grid">
-      <span class="word-chip">無怨無悔</span><span class="word-chip">堅忍不拔</span>
-      <span class="word-chip">持之以恆</span><span class="word-chip">精益求精</span>
-      <span class="word-chip">德才兼備</span><span class="word-chip">博學多才</span>
-      <span class="word-chip">承擔</span><span class="word-chip">奉獻</span><span class="word-chip">犧牲</span>
-      <span class="word-chip">磨練</span><span class="word-chip">砥礪</span><span class="word-chip">淬鍊</span>
-      <span class="word-chip">深遠</span><span class="word-chip">廣泛</span><span class="word-chip">深刻</span>
-      <span class="word-chip">領悟</span><span class="word-chip">洗禮</span><span class="word-chip">薰陶</span>
-      <span class="word-chip">社會</span><span class="word-chip">公民</span><span class="word-chip">環球</span>
-      <span class="word-chip">多元</span><span class="word-chip">融合</span><span class="word-chip">共融</span>
-      <span class="word-chip">審慎</span><span class="word-chip">周全</span><span class="word-chip">縜密</span>
-      <span class="word-chip">弘揚</span><span class="word-chip">傳承</span><span class="word-chip">發揚光大</span>
+      <button type="button" class="word-chip" data-word="無怨無悔">無怨無悔</button>
+      <button type="button" class="word-chip" data-word="堅忍不拔">堅忍不拔</button>
+      <button type="button" class="word-chip" data-word="持之以恆">持之以恆</button>
+      <button type="button" class="word-chip" data-word="精益求精">精益求精</button>
+      <button type="button" class="word-chip" data-word="德才兼備">德才兼備</button>
+      <button type="button" class="word-chip" data-word="博學多才">博學多才</button>
+      <button type="button" class="word-chip" data-word="承擔">承擔</button>
+      <button type="button" class="word-chip" data-word="奉獻">奉獻</button>
+      <button type="button" class="word-chip" data-word="犧牲">犧牲</button>
+      <button type="button" class="word-chip" data-word="磨練">磨練</button>
+      <button type="button" class="word-chip" data-word="砥礪">砥礪</button>
+      <button type="button" class="word-chip" data-word="淬鍊">淬鍊</button>
+      <button type="button" class="word-chip" data-word="深遠">深遠</button>
+      <button type="button" class="word-chip" data-word="廣泛">廣泛</button>
+      <button type="button" class="word-chip" data-word="深刻">深刻</button>
+      <button type="button" class="word-chip" data-word="領悟">領悟</button>
+      <button type="button" class="word-chip" data-word="洗禮">洗禮</button>
+      <button type="button" class="word-chip" data-word="薰陶">薰陶</button>
+      <button type="button" class="word-chip" data-word="社會">社會</button>
+      <button type="button" class="word-chip" data-word="公民">公民</button>
+      <button type="button" class="word-chip" data-word="環球">環球</button>
+      <button type="button" class="word-chip" data-word="多元">多元</button>
+      <button type="button" class="word-chip" data-word="融合">融合</button>
+      <button type="button" class="word-chip" data-word="共融">共融</button>
+      <button type="button" class="word-chip" data-word="審慎">審慎</button>
+      <button type="button" class="word-chip" data-word="周全">周全</button>
+      <button type="button" class="word-chip" data-word="縜密">縜密</button>
+      <button type="button" class="word-chip" data-word="弘揚">弘揚</button>
+      <button type="button" class="word-chip" data-word="傳承">傳承</button>
+      <button type="button" class="word-chip" data-word="發揚光大">發揚光大</button>
     </div>
     <p class="section-note">P6 默書句子常達 15-20 字，且包含複雜句式，建議多用 AI 語音練習聽說結合。</p>
   </div>
@@ -380,9 +670,9 @@
   <h2 class="blog-h2">如何使用此生字表練習？</h2>
   <p class="blog-p">此列表可以多種方式配合 AI 工具使用：</p>
   <ol style="color: var(--text-light); line-height: 1.85; padding-left: 20px; margin-bottom: 24px;">
+    <li style="margin-bottom: 12px;"><strong style="color: var(--text-white);">網頁發音練習</strong>：直接點擊任意詞語聆聽發音，右上角切換粵語／普通話；按「全部播放」可順序播放整個年級詞彙，適合聽力訓練。</li>
     <li style="margin-bottom: 12px;"><strong style="color: var(--text-white);">用 AceSpeller AI 出題功能</strong>：在「AI 出題」頁面輸入「家庭」「環保」「節日」等主題詞，AI 自動為對應年級生成適合的生字和句子，省去手動挑選的麻煩。</li>
     <li style="margin-bottom: 12px;"><strong style="color: var(--text-white);">拍照匯入學校默書表</strong>：學校的實際默書表永遠最準確，用 AceSpeller 拍照一秒匯入，立即開始練習。</li>
-    <li style="margin-bottom: 12px;"><strong style="color: var(--text-white);">課外加強練習</strong>：選取孩子程度相近年級的詞彙，在 App「手動輸入」功能中建立額外練習組。</li>
     <li style="margin-bottom: 12px;"><strong style="color: var(--text-white);">升級備課</strong>：升讀新年級前，可提前接觸下一年級詞彙，讓孩子有心理準備。</li>
   </ol>
 
@@ -412,6 +702,187 @@
 <footer class="shared-footer">
   <p>© 2026 MuduoPro Limited · <a href="/">AceSpeller 默書100分</a> · <a href="/privacy">隱私政策</a> · <a href="/terms">服務條款</a></p>
 </footer>
+
+<!-- ── Interactive Word List Script ── -->
+<script>
+(function () {
+  'use strict';
+
+  // ── TTS Support Check ──
+  const synth = window.speechSynthesis;
+  if (!synth) {
+    document.getElementById('tts-unsupported').style.display = 'block';
+    return;
+  }
+
+  // ── State ──
+  let currentLang = 'zh-HK';
+  let isPlayingAll = false;
+  let playAllAbort = false;
+  let activePlayBtn = null;
+
+  // ── Language Toggle ──
+  const langBtn = document.getElementById('lang-btn');
+  langBtn.addEventListener('click', function () {
+    synth.cancel();
+    stopAll();
+    currentLang = currentLang === 'zh-HK' ? 'zh-CN' : 'zh-HK';
+    updateLangBtn();
+  });
+
+  function updateLangBtn() {
+    if (currentLang === 'zh-HK') {
+      langBtn.textContent = '🔊 粵語';
+      langBtn.className = 'lang-toggle';
+    } else {
+      langBtn.textContent = '🔊 普通話';
+      langBtn.className = 'lang-toggle mandarin';
+    }
+  }
+
+  // ── Speak a word, returns Promise ──
+  function speak(word, chipEl) {
+    return new Promise(function (resolve) {
+      synth.cancel();
+      clearPlaying();
+      if (chipEl) chipEl.classList.add('playing');
+
+      var u = new SpeechSynthesisUtterance(word);
+      u.lang = currentLang;
+      u.rate = 0.82;
+      u.pitch = 1.0;
+
+      u.onend = function () {
+        if (chipEl) {
+          chipEl.classList.remove('playing');
+          chipEl.classList.add('listened');
+        }
+        resolve();
+      };
+      u.onerror = function () {
+        if (chipEl) chipEl.classList.remove('playing');
+        resolve();
+      };
+
+      // iOS Safari workaround: wait one tick
+      setTimeout(function () { synth.speak(u); }, 50);
+    });
+  }
+
+  function clearPlaying() {
+    document.querySelectorAll('.word-chip.playing').forEach(function (el) {
+      el.classList.remove('playing');
+    });
+  }
+
+  // ── Word Chip Click ──
+  document.querySelectorAll('.word-chip').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (isPlayingAll) stopAll();
+      speak(this.dataset.word, this);
+    });
+  });
+
+  // ── Play All ──
+  function stopAll() {
+    playAllAbort = true;
+    isPlayingAll = false;
+    synth.cancel();
+    clearPlaying();
+    if (activePlayBtn) {
+      activePlayBtn.textContent = '▶ 全部播放';
+      activePlayBtn.classList.remove('playing');
+      activePlayBtn = null;
+    }
+  }
+
+  async function playAll(gradeId, playBtn) {
+    if (isPlayingAll) {
+      stopAll();
+      return;
+    }
+
+    isPlayingAll = true;
+    playAllAbort = false;
+    activePlayBtn = playBtn;
+
+    playBtn.textContent = '⏹ 停止';
+    playBtn.classList.add('playing');
+
+    var section = document.getElementById(gradeId);
+    var chips = Array.from(section.querySelectorAll('.word-chip'));
+
+    // Reset listened state for this section
+    chips.forEach(function (c) { c.classList.remove('listened'); });
+
+    for (var i = 0; i < chips.length; i++) {
+      if (playAllAbort) break;
+
+      // Scroll chip into view smoothly
+      chips[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      await speak(chips[i].dataset.word, chips[i]);
+
+      if (!playAllAbort && i < chips.length - 1) {
+        // Pause between words
+        await waitMs(450);
+      }
+    }
+
+    isPlayingAll = false;
+    playAllAbort = false;
+    if (activePlayBtn) {
+      activePlayBtn.textContent = '▶ 全部播放';
+      activePlayBtn.classList.remove('playing');
+      activePlayBtn = null;
+    }
+  }
+
+  function waitMs(ms) {
+    return new Promise(function (resolve) { setTimeout(resolve, ms); });
+  }
+
+  // Bind play buttons
+  document.querySelectorAll('.grade-play-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      playAll(this.dataset.target, this);
+    });
+  });
+
+  // ── Grade Filter Tabs — scroll spy ──
+  var gradeTabs = Array.from(document.querySelectorAll('.grade-tab'));
+  var gradeSections = Array.from(document.querySelectorAll('.grade-section[id]'));
+
+  gradeTabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var target = document.getElementById(this.dataset.grade);
+      if (!target) return;
+      var offset = 116; // nav (~56px) + controls bar (~48px) + margin
+      var top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+
+  // Scroll spy using IntersectionObserver
+  if ('IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          gradeTabs.forEach(function (tab) {
+            tab.classList.toggle('active', tab.dataset.grade === id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -65% 0px' });
+
+    gradeSections.forEach(function (s) { spy.observe(s); });
+  }
+
+  // Init
+  updateLangBtn();
+})();
+</script>
 
 </body>
 </html>
