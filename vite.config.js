@@ -18,6 +18,7 @@ export default defineConfig({
         blogTips: resolve(__dirname, 'blog/dictation-practice-tips.html'),
         blogAi: resolve(__dirname, 'blog/ai-dictation-guide.html'),
         blogWordList: resolve(__dirname, 'blog/primary-school-word-list.html'),
+        blogAssessmentReform: resolve(__dirname, 'blog/primary-school-assessment-reform-2026.html'),
       },
     },
   },
