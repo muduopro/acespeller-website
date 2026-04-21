@@ -284,9 +284,24 @@ function renderApp() {
               <li data-i18n="pricing_plus_f4"></li>
               <li data-i18n="pricing_plus_f5"></li>
               <li data-i18n="pricing_plus_f6"></li>
-              <li data-i18n="pricing_plus_f7"></li>
             </ul>
             <a href="/upgrade" class="btn btn-primary pricing-btn" data-i18n="pricing_plus_cta"></a>
+          </div>
+
+          <!-- Pro Card -->
+          <div class="glass-card pricing-card pricing-card-pro reveal reveal-delay-2">
+            <div class="pricing-badge pricing-badge-pro">👑 For Families</div>
+            <div class="pricing-tier" data-i18n="pricing_pro"></div>
+            <div class="pricing-price" data-i18n="pricing_pro_price"></div>
+            <ul class="pricing-features">
+              <li data-i18n="pricing_pro_f1"></li>
+              <li data-i18n="pricing_pro_f2"></li>
+              <li data-i18n="pricing_pro_f3"></li>
+              <li data-i18n="pricing_pro_f4"></li>
+              <li data-i18n="pricing_pro_f5"></li>
+              <li data-i18n="pricing_pro_f6"></li>
+            </ul>
+            <a href="/upgrade" class="btn btn-outline pricing-btn pricing-btn-pro" data-i18n="pricing_pro_cta"></a>
           </div>
 
         </div>

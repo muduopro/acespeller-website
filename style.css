@@ -997,9 +997,9 @@ details p {
 /* ===== PRICING SECTION ===== */
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
-  max-width: 760px;
+  max-width: 1060px;
   margin: 0 auto 32px;
 }
 
@@ -1014,6 +1014,23 @@ details p {
   border-color: rgba(255, 167, 38, 0.45);
   background: linear-gradient(145deg, rgba(255,167,38,0.07), rgba(26,5,51,0.5));
   box-shadow: 0 0 40px rgba(255,167,38,0.12);
+}
+
+.pricing-card-pro {
+  border-color: rgba(167, 112, 219, 0.45);
+  background: linear-gradient(145deg, rgba(167,112,219,0.07), rgba(26,5,51,0.5));
+  box-shadow: 0 0 40px rgba(167,112,219,0.12);
+}
+
+.pricing-card-pro .pricing-tier {
+  color: #c9a7f5;
+}
+
+.pricing-card-pro .pricing-price {
+  background: linear-gradient(135deg, #e0c8ff, #a770ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .pricing-badge {
@@ -1089,6 +1106,41 @@ details p {
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.7;
+}
+
+.pricing-badge-pro {
+  background: linear-gradient(135deg, #7b5ea7, #a770ef);
+  color: #fff;
+}
+
+.pricing-btn-pro {
+  border-color: rgba(167, 112, 219, 0.5);
+  color: #c9a7f5;
+}
+
+.pricing-btn-pro:hover {
+  border-color: #a770ef;
+  color: #e0c8ff;
+}
+
+/* ===== SHARED FOOTER ===== */
+.shared-footer {
+  background: rgba(8, 6, 26, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 32px 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.shared-footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.shared-footer a:hover {
+  color: var(--gold);
 }
 
 /* 小螢幕手機 (≤480px) */
