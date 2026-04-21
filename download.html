@@ -10,6 +10,7 @@
   <title>下載 AceSpeller | Download</title>
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="apple-touch-icon" href="/logo.png" />
+  <link rel="stylesheet" href="/style.css" />
   <script>
     (function () {
       var ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -32,6 +33,12 @@
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .download-main {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -123,6 +130,20 @@
 </head>
 
 <body>
+  <nav class="shared-nav">
+    <a href="/" class="shared-nav-brand">
+      <img src="/logo.png" alt="AceSpeller Logo" />
+      AceSpeller
+    </a>
+    <a href="/" class="shared-nav-back">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      返回首頁
+    </a>
+  </nav>
+  <div class="download-main">
   <div class="card">
     <div class="logo">🎓</div>
     <h1>AceSpeller</h1>
@@ -161,6 +182,7 @@
     </a>
 
     <p class="footer">© 2025 Muduopro Limited</p>
+  </div>
   </div>
 </body>
 

@@ -69,32 +69,6 @@
   <link rel="stylesheet" href="/style.css" />
 
   <style>
-    .blog-nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(8, 6, 26, 0.85);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      padding: 12px 24px; display: flex; align-items: center;
-      justify-content: space-between; gap: 16px;
-    }
-    .blog-nav-brand {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; color: var(--text-white);
-      font-weight: 800; font-size: 1rem;
-    }
-    .blog-nav-brand img { width: 32px; height: 32px; border-radius: 8px; }
-    .blog-nav-links { display: flex; align-items: center; gap: 16px; }
-    .blog-nav-links a {
-      color: var(--text-light); text-decoration: none;
-      font-size: 0.875rem; transition: color 0.2s;
-    }
-    .blog-nav-links a:hover { color: var(--gold); }
-    .blog-nav-cta {
-      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-      color: #1a0533 !important; font-weight: 700 !important;
-      padding: 8px 18px; border-radius: var(--radius-pill); font-size: 0.85rem !important;
-    }
-    .blog-nav-cta:hover { opacity: 0.9; }
 
     .blog-hero {
       text-align: center;
@@ -196,23 +170,20 @@
     .blog-footer a { color: var(--text-muted); text-decoration: none; }
     .blog-footer a:hover { color: var(--gold); }
 
-    @media (max-width: 600px) {
-      .blog-nav-links a:not(.blog-nav-cta) { display: none; }
-    }
   </style>
 </head>
 <body>
 
 <!-- Nav -->
-<nav class="blog-nav">
-  <a class="blog-nav-brand" href="/">
+<nav class="shared-nav">
+  <a class="shared-nav-brand" href="/">
     <img src="/logo.png" alt="AceSpeller Logo" />
     AceSpeller
   </a>
-  <div class="blog-nav-links">
-    <a href="/">回到首頁</a>
-    <a href="/upgrade">升級 Plus</a>
-    <a href="/download" class="blog-nav-cta">免費下載</a>
+  <div class="shared-nav-right">
+    <a href="/" class="shared-nav-link">回到首頁</a>
+    <a href="/upgrade" class="shared-nav-link">升級 Plus</a>
+    <a href="/download" class="shared-nav-cta">免費下載</a>
   </div>
 </nav>
 

@@ -917,6 +917,83 @@ details p {
   }
 }
 
+/* ===== SHARED SECONDARY NAV (upgrade, redeem, privacy, terms, download, blog) ===== */
+.shared-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8, 6, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.shared-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-white);
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.shared-nav-brand img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.shared-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.shared-nav-link {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.shared-nav-link:hover { color: var(--gold); }
+
+.shared-nav-cta {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: #1a0533;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.shared-nav-cta:hover { opacity: 0.9; color: #1a0533; }
+
+.shared-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.shared-nav-back:hover { color: var(--gold); }
+
+@media (max-width: 600px) {
+  .shared-nav-link { display: none; }
+}
+
 /* ===== PRICING SECTION ===== */
 .pricing-grid {
   display: grid;
