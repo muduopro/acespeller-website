@@ -20,6 +20,7 @@ export default defineConfig({
         blogWordList: resolve(__dirname, 'blog/primary-school-word-list.html'),
         blogAssessmentReform: resolve(__dirname, 'blog/primary-school-assessment-reform-2026.html'),
         blogSecondaryPlacement: resolve(__dirname, 'blog/secondary-school-placement-2026.html'),
+        blogEnrollmentDecline: resolve(__dirname, 'blog/primary-school-enrollment-decline-2026.html'),
       },
     },
   },

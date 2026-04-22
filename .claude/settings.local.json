@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build 2>&1)",
+      "Bash(git add vite.config.js privacy.html terms.html && git commit -m \"$\\(cat <<'EOF'\nfeat: 新增隱私政策與使用條款頁面至建置輸出\n\n- 建立 vite.config.js 設定多頁面應用程式 \\(multi-page app\\)，將 privacy.html 及 terms.html 加入 Rollup 建置入口\n- 更新 privacy.html 及 terms.html 內容為最新雙語版本（英文 + 繁體中文）\n- 聯絡電郵統一更新為 cs@acespeller.com.hk\n- 修正前：privacy.html / terms.html 未被 Vite 建置，dist/ 目錄缺少這兩個頁面，導致線上無法訪問\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git add main.js && git commit -m \"$\\(cat <<'EOF'\nfix\\(nav\\): 暫時隱藏升級連結以防止 Demo 卡片階段免費升級\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push origin main)",
+      "Bash(ls /Users/muduopro/.gemini/antigravity/scratch/acespeller-website/*.js)"
+    ]
+  }
+}
