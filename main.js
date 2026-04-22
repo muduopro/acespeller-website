@@ -20,6 +20,7 @@ function renderFrame() {
           <a href="#features" data-i18n="nav_features"></a>
           <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
           <a href="/blog/" data-i18n="nav_blog"></a>
+          <a href="/faq">FAQ</a>
           <a href="/redeem" data-i18n="nav_redeem"></a>
           <a href="/upgrade" data-i18n="nav_upgrade"></a>
         </nav>
@@ -43,6 +44,7 @@ function renderFrame() {
       <a href="#features" data-i18n="nav_features"></a>
       <!-- <a href="#testimonials" data-i18n="nav_testimonials"></a> 隱藏評價區塊連結 -->
       <a href="/blog/" data-i18n="nav_blog"></a>
+      <a href="/faq">FAQ</a>
       <a href="/redeem" data-i18n="nav_redeem"></a>
       <a href="/upgrade" data-i18n="nav_upgrade"></a>
       <div class="mobile-lang-row">
@@ -69,6 +71,7 @@ function renderFrame() {
         </div>
         <div class="footer-links">
           <a href="/blog/" data-i18n="nav_blog"></a>
+          <a href="/faq">FAQ</a>
           <a href="/privacy" data-i18n="footer_privacy"></a>
           <a href="/terms" data-i18n="footer_terms"></a>
           <a href="mailto:cs@acespeller.com.hk" data-i18n="footer_contact"></a>

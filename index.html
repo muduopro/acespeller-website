@@ -38,7 +38,113 @@
   <link rel="alternate" hreflang="en"       href="https://acespeller.com.hk/" />
   <link rel="alternate" hreflang="x-default" href="https://acespeller.com.hk/" />
 
-  <!-- ===== JSON-LD FAQ Schema（讓 Google 搜尋結果顯示 FAQ 摺疊） ===== -->
+  <!-- ===== JSON-LD：品牌實體（Organization）===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AceSpeller 默書100分",
+    "alternateName": ["AceSpeller", "默書100分", "MuduoPro"],
+    "url": "https://acespeller.com.hk/",
+    "logo": "https://acespeller.com.hk/logo.png",
+    "description": "AceSpeller（默書100分）是香港本地開發的 AI 默書練習 App，專為香港小學生及中學生設計，支援中文（粵語/普通話）及英文默書練習。",
+    "foundingLocation": { "@type": "Place", "name": "Hong Kong" },
+    "areaServed": "Hong Kong",
+    "email": "cs@acespeller.com.hk",
+    "sameAs": [
+      "https://apps.apple.com/hk/app/acespeller/id6474907397",
+      "https://play.google.com/store/apps/details?id=com.muduopro.dictationHelper"
+    ]
+  }
+  </script>
+
+  <!-- ===== JSON-LD：SoftwareApplication（GEO + Rich Snippet）===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["SoftwareApplication", "MobileApplication"],
+    "name": "AceSpeller 默書100分",
+    "alternateName": ["AceSpeller", "默書100分", "默書 App", "AI 默書 App"],
+    "description": "專為香港小學生及中學生設計的 AI 默書練習 App。獨家 AI 拍照辨識，一秒匯入學校默書表；支援粵語、普通話、英語三語 AI 標準發音；結合遊戲化獎勵機制，讓孩子主動練習中英文默書，告別死記硬背。",
+    "applicationCategory": "EducationApplication",
+    "applicationSubCategory": "語言學習 / 默書練習",
+    "operatingSystem": ["iOS 13.0+", "Android 8.0+"],
+    "inLanguage": ["zh-HK", "zh-CN", "en-US"],
+    "url": "https://acespeller.com.hk/",
+    "downloadUrl": "https://acespeller.com.hk/download",
+    "installUrl": "https://acespeller.com.hk/download",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "免費版",
+        "price": "0",
+        "priceCurrency": "HKD",
+        "description": "AI 拍照辨識、中英文默書練習、遊戲化獎勵完全免費"
+      },
+      {
+        "@type": "Offer",
+        "name": "Ace Plus",
+        "price": "38",
+        "priceCurrency": "HKD",
+        "description": "每月 HK$38，解鎖雲端同步、每日 AI 掃描 20 次、進階語音設定"
+      },
+      {
+        "@type": "Offer",
+        "name": "Ace Pro",
+        "price": "88",
+        "priceCurrency": "HKD",
+        "description": "每月 HK$88，解鎖 AI Coach、Smart Review、每日 AI 掃描 60 次"
+      }
+    ],
+    "author": {
+      "@type": "Organization",
+      "name": "MuduoPro Limited",
+      "url": "https://acespeller.com.hk/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "MuduoPro Limited",
+      "url": "https://acespeller.com.hk/"
+    },
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": "student",
+      "audienceType": "香港小學生、中學生及家長"
+    },
+    "screenshot": "https://acespeller.com.hk/og-image.png",
+    "featureList": [
+      "AI 拍照辨識默書表（OCR）",
+      "粵語 AI 標準發音（Azure TTS）",
+      "普通話 AI 標準發音",
+      "英語 AI 標準發音",
+      "遊戲化獎勵機制（轉蛋機、成就勳章、AceCoins）",
+      "Flashcard 間隔重複溫習",
+      "每日默書挑戰",
+      "AI 智能出題",
+      "AI 口說練習評分",
+      "學習統計分析",
+      "跨裝置雲端同步（Plus/Pro）",
+      "好友分享默書清單",
+      "AI 拆字記憶法（記憶輔助）",
+      "香港 EDB 中文字典及筆順動畫"
+    ],
+    "potentialAction": {
+      "@type": "DownloadAction",
+      "target": [
+        "https://apps.apple.com/hk/app/acespeller/id6474907397",
+        "https://play.google.com/store/apps/details?id=com.muduopro.dictationHelper"
+      ]
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "120",
+      "bestRating": "5"
+    }
+  }
+  </script>
+
+  <!-- ===== JSON-LD FAQ Schema（Google FAQ 摺疊 + GEO 目標問句）===== -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -46,76 +152,100 @@
     "mainEntity": [
       {
         "@type": "Question",
+        "name": "香港小學生默書練習有什麼 App 推薦？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "AceSpeller（默書100分）是專為香港小學生設計的 AI 默書練習 App。支援 AI 拍照一秒匯入學校默書表、粵語及普通話標準發音朗讀、英文默書練習，並有遊戲化獎勵機制讓孩子主動學習。iOS 及 Android 均可免費下載。"
+        }
+      },
+      {
+        "@type": "Question",
         "name": "AceSpeller 默書100分是免費的嗎？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "是的！核心的拍照辨識與雙語默書功能完全免費。另有進階的 Plus 方案提供雲端同步、無限次數與更多 AI 功能。"
+          "text": "是的，AceSpeller 核心功能完全免費，包括 AI 拍照辨識、中英文默書練習、粵普英三語發音及遊戲化獎勵。Ace Plus（HK$38/月）提供雲端同步及每日 20 次 AI 掃描；Ace Pro（HK$88/月）提供 AI Coach、Smart Review 及每日 60 次 AI 掃描。"
         }
       },
       {
         "@type": "Question",
-        "name": "AceSpeller 支援哪些語言的默書？",
+        "name": "AceSpeller 支援粵語發音嗎？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "完整支援中文（廣東話及普通話 AI 標準發音）及英文默書，完美對接香港小學學習需求。"
+          "text": "是的，AceSpeller 採用 Microsoft Azure AI 語音引擎，支援粵語（廣東話）、普通話及英語三語標準發音，讓孩子在家練習時能聽到準確的粵語朗讀，完全符合香港小學課程需求。"
         }
       },
       {
         "@type": "Question",
-        "name": "AceSpeller 照片辨識準確率高嗎？",
+        "name": "有什麼 App 可以幫助孩子練習英文默書？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "採用頂尖 AI 雲端文字辨識技術，針對繁體中文與列印字體優化，準確率極高。辨識有誤可隨時手動修改。"
+          "text": "AceSpeller 支援英文默書練習，包括英語 AI 標準發音、英文拼寫練習、Phonics 輔助及 AI 智能出題。家長只需拍下學校英文默書表，App 自動辨識並為孩子逐詞播放英語發音。"
         }
       },
       {
         "@type": "Question",
-        "name": "AceSpeller 有什麼特別功能？",
+        "name": "如何用 App 幫孩子準備默書？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "AceSpeller 擁有轉蛋機收藏系統、成就勳章、Flashcard 溫習、拼字遊戲、AI 智能出題、AI 口說練習及每日默書挑戰等豐富功能，讓孩子主動學習。"
+          "text": "用 AceSpeller 準備默書的步驟：1）拍下學校默書表，AI 自動辨識所有生字；2）讓孩子聽 AI 粵語/英語發音朗讀；3）進行默書練習，App 即時評分；4）系統標記常錯字，針對性加強練習；5）使用 Flashcard 功能在睡前溫習。整個過程無需家長全程陪同。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AceSpeller 有什麼遊戲化功能讓孩子愛上默書？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "AceSpeller 設有多項遊戲化功能：每次默書得 AceCoins 獎勵；用 AceCoins 抽轉蛋機獲得限定收藏卡；解鎖成就勳章；每日打卡保持連勝紀錄；排行榜與好友競爭學習。這些機制讓默書從苦差變成孩子期待的活動。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AceSpeller 的 AI 拍照辨識準確率高嗎？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "AceSpeller 採用雲端 AI OCR 技術，針對繁體中文字體及印刷字體優化，準確率極高。即使是手寫默書表或字跡不清的情況，也有本機 OCR 作為備用。辨識結果可手動修改，確保每次練習使用正確內容。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AceSpeller 支援 iOS 和 Android 嗎？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "是的，AceSpeller 同時支援 iOS（iPhone/iPad，需 iOS 13.0 或以上）及 Android（需 Android 8.0 或以上）。可在 App Store 及 Google Play 免費下載。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AceSpeller Plus 和 Pro 有什麼分別？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ace Plus（HK$38/月或 HK$388/年）：雲端跨裝置同步、每日 AI 掃描 20 次、10 個自訂分類、進階語音設定。Ace Pro（HK$88/月或 HK$788/年）：在 Plus 基礎上加入 AI Coach 個人化學習建議、Smart Review 智能複習系統、每日 AI 掃描 60 次、20 個自訂分類。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "香港小學生默書怎樣才能拿到高分？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "香港小學默書高分秘訣：1）分段記憶（每次練習 3-5 個字，勿貪多）；2）間隔重複（默書前一週開始練習，勿臨急抱佛腳）；3）先聽後寫（模擬實際默書環境）；4）錯字針對練習（重點抄 3 遍而非全部重抄）；5）保持每日短時練習（15 分鐘勝過臨考前 2 小時）。AceSpeller App 提供上述所有練習模式。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AceSpeller 有沒有 EDB 中文字典功能？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "有！AceSpeller 內置香港教育局（EDB）認可的中文字典，包含筆順動畫、粵語及普通話發音、字義解釋，幫助學生正確理解生字。此功能完全免費。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "兄弟姐妹可以共用一個 AceSpeller 帳號嗎？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "可以！AceSpeller 支援「家庭子帳號」功能，一個主帳號可以建立多個子帳號，每個小朋友有獨立的默書記錄、成就及統計，方便兄弟姐妹在同一部手機上各自使用。"
         }
       }
-    ]
-  }
-  </script>
-
-  <!-- ===== JSON-LD 結構化數據（MobileApplication Rich Snippet） ===== -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "MobileApplication",
-    "name": "AceSpeller 默書100分",
-    "alternateName": ["AceSpeller", "默書100分", "默書 App"],
-    "description": "專為香港學生設計的 AI 默書輔助 App。獨家拍照一秒匯入學校默書表，支援粵普雙語標準 AI 發音，結合遊戲化獎勵機制，讓孩子主動練習中英文默書。",
-    "applicationCategory": "EducationApplication",
-    "operatingSystem": "iOS, Android",
-    "inLanguage": ["zh-HK", "zh-CN", "en"],
-    "url": "https://acespeller.com.hk/",
-    "downloadUrl": "https://acespeller.com.hk/download",
-    "installUrl": "https://acespeller.com.hk/download",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "HKD"
-    },
-    "author": {
-      "@type": "Organization",
-      "name": "MuduoPro Limited",
-      "url": "https://acespeller.com.hk/"
-    },
-    "screenshot": "https://acespeller.com.hk/og-image.png",
-    "featureList": [
-      "AI 拍照辨識默書表",
-      "粵語 AI 標準發音",
-      "普通話 AI 標準發音",
-      "英文 AI 發音",
-      "遊戲化獎勵機制",
-      "轉蛋收藏系統",
-      "成就勳章",
-      "學習統計分析",
-      "Flashcard 溫習",
-      "每日默書挑戰"
     ]
   }
   </script>
