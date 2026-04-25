@@ -24,6 +24,7 @@ export default defineConfig({
         blogEnrollmentDecline: resolve(__dirname, 'blog/primary-school-enrollment-decline-2026.html'),
         blogStudentMacbookVsIpad: resolve(__dirname, 'blog/student-macbook-vs-ipad-2026.html'),
         blogDse2026ElectiveExamTips: resolve(__dirname, 'blog/dse-2026-elective-exam-tips.html'),
+        blogP6AssessmentExamTips: resolve(__dirname, 'blog/p6-assessment-exam-tips-2026.html'),
       },
     },
   },
