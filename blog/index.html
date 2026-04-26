@@ -184,9 +184,57 @@
       font-size: 0.95rem;
     }
 
+    /* ── Toolbar (sort + view toggle) ── */
+    .blog-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .blog-sort {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .blog-sort select {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      color: var(--text-light);
+      font-size: 0.82rem;
+      padding: 5px 12px;
+      cursor: pointer;
+      outline: none;
+    }
+    .blog-sort select:focus { border-color: var(--gold); }
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+    }
+    .view-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      font-size: 1rem;
+    }
+    .view-btn.active, .view-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ── Card mode (default) ── */
     .article-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 24px;
       margin-bottom: 64px;
     }
@@ -209,6 +257,7 @@
       font-size: 0.75rem; font-weight: 700;
       padding: 4px 10px; border-radius: var(--radius-pill);
       margin-bottom: 12px; width: fit-content;
+      flex-shrink: 0;
     }
     /* Tag colours per category */
     .article-card[data-category="study-tips"] .article-card-tag {
@@ -240,6 +289,52 @@
     .article-card-read {
       margin-left: auto; color: var(--gold);
       font-weight: 700; font-size: 0.8rem;
+    }
+
+    /* ── List mode ── */
+    .article-grid.list-mode {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .article-grid.list-mode .article-card {
+      flex-direction: row;
+      align-items: center;
+      padding: 16px 20px;
+      gap: 16px;
+      transform: none !important;
+    }
+    .article-grid.list-mode .article-card:hover {
+      transform: translateX(4px) !important;
+    }
+    .article-grid.list-mode .article-card-tag {
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+    .article-grid.list-mode .article-card h2 {
+      font-size: 0.95rem;
+      margin-bottom: 0;
+      flex: 1;
+    }
+    .article-grid.list-mode .article-card p {
+      display: none;
+    }
+    .article-grid.list-mode .article-card-meta {
+      gap: 10px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .article-grid.list-mode .article-card-read {
+      margin-left: 0;
+    }
+    @media (max-width: 600px) {
+      .article-grid.list-mode .article-card {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .article-grid.list-mode .article-card h2 {
+        font-size: 0.9rem;
+        flex-basis: 100%;
+      }
     }
 
     .cta-block {
@@ -312,10 +407,25 @@
     </button>
   </div>
 
+  <!-- Toolbar: sort + view toggle -->
+  <div class="blog-toolbar">
+    <div class="blog-sort">
+      <span>排序：</span>
+      <select id="sortSelect">
+        <option value="newest">最新優先</option>
+        <option value="oldest">最舊優先</option>
+      </select>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="btnCard" title="卡片模式" aria-label="卡片模式">⊞</button>
+      <button class="view-btn" id="btnList" title="列表模式" aria-label="列表模式">☰</button>
+    </div>
+  </div>
+
   <div class="article-grid" id="articleGrid">
 
     <!-- Article: dictation-practice-tips | category: study-tips -->
-    <a class="article-card" href="/blog/dictation-practice-tips" data-category="study-tips">
+    <a class="article-card" href="/blog/dictation-practice-tips" data-category="study-tips" data-date="2026-04-20">
       <span class="article-card-tag">學習技巧</span>
       <h2>小學默書練習方法：7個讓孩子默書100分的有效技巧</h2>
       <p>分段記憶法、間隔重複、先聽後寫⋯掌握這 7 個技巧，讓孩子的默書不再是噩夢。</p>
@@ -327,7 +437,7 @@
     </a>
 
     <!-- Article: ai-dictation-guide | category: study-tips -->
-    <a class="article-card" href="/blog/ai-dictation-guide" data-category="study-tips">
+    <a class="article-card" href="/blog/ai-dictation-guide" data-category="study-tips" data-date="2026-04-20">
       <span class="article-card-tag">AI 輔助學習</span>
       <h2>如何用 AI 幫孩子準備默書？2026 完整家長指南</h2>
       <p>拍照辨識、AI 發音、智能出題⋯AI 讓家長每週節省 2-3 小時，孩子自主練習。</p>
@@ -339,7 +449,7 @@
     </a>
 
     <!-- Article: primary-school-word-list | category: study-tips -->
-    <a class="article-card" href="/blog/primary-school-word-list" data-category="study-tips">
+    <a class="article-card" href="/blog/primary-school-word-list" data-category="study-tips" data-date="2026-04-20">
       <span class="article-card-tag">生字參考</span>
       <h2>香港小學中文默書生字表 P1-P6 參考</h2>
       <p>按年級整理的常見默書詞彙，從 P1 基礎字到 P6 四字成語，一站式參考。</p>
@@ -351,7 +461,7 @@
     </a>
 
     <!-- Article: primary-school-assessment-reform-2026 | category: education-news -->
-    <a class="article-card" href="/blog/primary-school-assessment-reform-2026" data-category="education-news">
+    <a class="article-card" href="/blog/primary-school-assessment-reform-2026" data-category="education-news" data-date="2026-04-21">
       <span class="article-card-tag">教育新聞</span>
       <h2>小學呈分試2026大改革：體育科納入、「88844222」新計分法家長全攻略</h2>
       <p>體育科首次納入呈分試、常識拆為科學+人文，一文拆解新制各科比重及備考策略。</p>
@@ -363,7 +473,7 @@
     </a>
 
     <!-- Article: secondary-school-placement-2026 | category: school-admission -->
-    <a class="article-card" href="/blog/secondary-school-placement-2026" data-category="school-admission">
+    <a class="article-card" href="/blog/secondary-school-placement-2026" data-category="school-admission" data-date="2026-04-21">
       <span class="article-card-tag">升學資訊</span>
       <h2>香港升中2026全攻略：自行分配學位、統一派位、叩門三大關鍵策略</h2>
       <p>統一派位選校表格已派發，7月7日出結果。Band計算、甲乙部選校策略及叩門攻略一文睇清。</p>
@@ -375,7 +485,7 @@
     </a>
 
     <!-- Article: primary-school-enrollment-decline-2026 | category: education-news -->
-    <a class="article-card" href="/blog/primary-school-enrollment-decline-2026" data-category="education-news">
+    <a class="article-card" href="/blog/primary-school-enrollment-decline-2026" data-category="education-news" data-date="2026-04-21">
       <span class="article-card-tag">教育新聞</span>
       <h2>15間小學「派0班」創新高：家長選校必看的五大關鍵</h2>
       <p>15間小學創歷史新高「派0班」，38間自行收生未達開班線。少子化下如何評估學校穩定性？</p>
@@ -387,7 +497,7 @@
     </a>
 
     <!-- Article: student-macbook-vs-ipad-2026 | category: student-tech -->
-    <a class="article-card" href="/blog/student-macbook-vs-ipad-2026" data-category="student-tech">
+    <a class="article-card" href="/blog/student-macbook-vs-ipad-2026" data-category="student-tech" data-date="2026-04-23">
       <span class="article-card-tag">學生科技</span>
       <h2>2026年香港學生買 MacBook 還是 iPad 好？一文拆解選購攻略及 Apple 教育優惠</h2>
       <p>MacBook Air M4 vs iPad Air M4，按年級推薦最適合選擇，附 Apple 教育優惠申請方法，可省 HK$800–1,000。</p>
@@ -399,7 +509,7 @@
     </a>
 
     <!-- Article: dse-2026-elective-exam-tips | category: education-news -->
-    <a class="article-card" href="/blog/dse-2026-elective-exam-tips" data-category="education-news">
+    <a class="article-card" href="/blog/dse-2026-elective-exam-tips" data-category="education-news" data-date="2026-04-23">
       <span class="article-card-tag">DSE攻略</span>
       <h2>DSE 2026 核心科已考完，選修科最後10天如何衝刺？應試技巧全攻略</h2>
       <p>資訊科技、歷史、BAFS 等選修科仍在進行。臨場技巧 + 熱門科目重點 + 放榜JUPAS部署一文看清。</p>
@@ -411,7 +521,7 @@
     </a>
 
     <!-- Article: p6-assessment-exam-tips-2026 | category: school-admission -->
-    <a class="article-card" href="/blog/p6-assessment-exam-tips-2026" data-category="school-admission">
+    <a class="article-card" href="/blog/p6-assessment-exam-tips-2026" data-category="school-admission" data-date="2026-04-24">
       <span class="article-card-tag">升學資訊</span>
       <h2>呈分試第三次怎樣準備？5個策略幫小六生衝高中英文成績</h2>
       <p>中英文各佔9分，是呈分試最重要的兩科。5個即用策略助小六生在最後關鍵衝高分數。</p>
@@ -423,7 +533,7 @@
     </a>
 
     <!-- Article: primary-one-placement-results-2026 | category: school-admission -->
-    <a class="article-card" href="/blog/primary-one-placement-results-2026" data-category="school-admission">
+    <a class="article-card" href="/blog/primary-one-placement-results-2026" data-category="school-admission" data-date="2026-04-25">
       <span class="article-card-tag">升學資訊</span>
       <h2>小一統一派位2026結果幾時出？等待期間家長必做的5件事</h2>
       <p>6月初公布結果，網上查詢、通知書解讀、入學登記文件、叩門攻略一文整理。</p>
@@ -461,47 +571,86 @@
 
 <script>
   (function () {
-    const tabs = document.querySelectorAll('.category-tab');
-    const cards = document.querySelectorAll('.article-card');
+    const grid      = document.getElementById('articleGrid');
+    const tabs      = document.querySelectorAll('.category-tab');
     const emptyState = document.getElementById('emptyState');
+    const sortSelect = document.getElementById('sortSelect');
+    const btnCard   = document.getElementById('btnCard');
+    const btnList   = document.getElementById('btnList');
 
-    // Count articles per category
-    const counts = { all: cards.length };
-    cards.forEach(card => {
-      const cat = card.dataset.category;
-      counts[cat] = (counts[cat] || 0) + 1;
-    });
+    // ── State ──
+    let currentFilter = 'all';
+    let currentSort   = 'newest';
+    let currentView   = 'card';
 
-    // Update tab count badges
-    Object.keys(counts).forEach(key => {
-      const el = document.getElementById('count-' + key);
-      if (el) el.textContent = counts[key] || 0;
-    });
+    // ── Restore preferences ──
+    try {
+      currentFilter = sessionStorage.getItem('blogFilter') || 'all';
+      currentSort   = localStorage.getItem('blogSort')   || 'newest';
+      currentView   = localStorage.getItem('blogView')   || 'card';
+    } catch (_) {}
 
-    // Filter logic
+    // ── Count badges ──
+    function updateCounts() {
+      const all = grid.querySelectorAll('.article-card');
+      const counts = { all: all.length };
+      all.forEach(c => { const cat = c.dataset.category; counts[cat] = (counts[cat] || 0) + 1; });
+      Object.keys(counts).forEach(key => {
+        const el = document.getElementById('count-' + key);
+        if (el) el.textContent = counts[key] || 0;
+      });
+    }
+
+    // ── Sort ──
+    function applySort(order) {
+      currentSort = order;
+      sortSelect.value = order;
+      try { localStorage.setItem('blogSort', order); } catch (_) {}
+
+      const cards = [...grid.querySelectorAll('.article-card')];
+      cards.sort((a, b) => {
+        const da = a.dataset.date || '';
+        const db = b.dataset.date || '';
+        return order === 'newest' ? db.localeCompare(da) : da.localeCompare(db);
+      });
+      cards.forEach(c => grid.appendChild(c));
+    }
+
+    // ── Filter ──
     function applyFilter(filter) {
+      currentFilter = filter;
+      try { sessionStorage.setItem('blogFilter', filter); } catch (_) {}
+
       let visible = 0;
-      cards.forEach(card => {
+      grid.querySelectorAll('.article-card').forEach(card => {
         const show = filter === 'all' || card.dataset.category === filter;
         card.style.display = show ? '' : 'none';
         if (show) visible++;
       });
       emptyState.style.display = visible === 0 ? 'block' : 'none';
-
       tabs.forEach(t => t.classList.toggle('active', t.dataset.filter === filter));
-
-      // Persist selection
-      try { sessionStorage.setItem('blogFilter', filter); } catch (_) {}
     }
 
-    // Restore last filter from session
-    let initial = 'all';
-    try { initial = sessionStorage.getItem('blogFilter') || 'all'; } catch (_) {}
-    applyFilter(initial);
+    // ── View ──
+    function applyView(view) {
+      currentView = view;
+      try { localStorage.setItem('blogView', view); } catch (_) {}
+      grid.classList.toggle('list-mode', view === 'list');
+      btnCard.classList.toggle('active', view === 'card');
+      btnList.classList.toggle('active', view === 'list');
+    }
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => applyFilter(tab.dataset.filter));
-    });
+    // ── Init ──
+    updateCounts();
+    applySort(currentSort);
+    applyFilter(currentFilter);
+    applyView(currentView);
+
+    // ── Events ──
+    sortSelect.addEventListener('change', () => applySort(sortSelect.value));
+    btnCard.addEventListener('click', () => applyView('card'));
+    btnList.addEventListener('click', () => applyView('list'));
+    tabs.forEach(tab => tab.addEventListener('click', () => applyFilter(tab.dataset.filter)));
   })();
 </script>
 
