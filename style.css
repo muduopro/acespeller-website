@@ -1137,21 +1137,91 @@ details p {
 .shared-footer {
   background: rgba(8, 6, 26, 0.9);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 32px 24px;
-  text-align: center;
+  padding: 40px 24px 32px;
   color: var(--text-muted);
   font-size: 0.85rem;
-  line-height: 1.8;
 }
 
+.shared-footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.shared-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-light);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.shared-footer-brand img {
+  border-radius: 6px;
+}
+
+.shared-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+}
+
+.shared-footer-links a,
 .shared-footer a {
   color: var(--text-muted);
   text-decoration: none;
+  transition: color 0.15s;
 }
 
+.shared-footer-links a:hover,
 .shared-footer a:hover {
   color: var(--gold);
 }
+
+.shared-footer-copy {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.3);
+  margin: 0;
+}
+
+/* ── Share bar ── */
+.share-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 20px 0 8px;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 32px;
+}
+.share-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-light);
+  transition: border-color 0.15s, color 0.15s;
+}
+.share-btn:hover { border-color: var(--gold); color: var(--gold); }
+.share-whatsapp:hover { border-color: #25d366; color: #25d366; }
+.share-facebook:hover { border-color: #1877f2; color: #1877f2; }
 
 /* 小螢幕手機 (≤480px) */
 @media (max-width: 480px) {
