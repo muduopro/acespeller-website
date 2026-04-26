@@ -1,5 +1,7 @@
 import './style.css'
 import { translations } from './locales.js';
+import { auth } from './auth.js';
+import { onAuthStateChanged } from 'firebase/auth';
 
 let currentLang = 'zh-HK';
 
@@ -24,6 +26,7 @@ function renderFrame() {
           <a href="/redeem" data-i18n="nav_redeem"></a>
           <a href="/upgrade" data-i18n="nav_upgrade"></a>
         </nav>
+        <a href="/profile" id="nav-profile-link" class="nav-profile-link" style="display:none"></a>
         <select id="langSwitcher" aria-label="語言切換">
           <option value="zh-HK">繁體中文</option>
           <option value="zh-CN">简体中文</option>
@@ -47,6 +50,7 @@ function renderFrame() {
       <a href="/faq">FAQ</a>
       <a href="/redeem" data-i18n="nav_redeem"></a>
       <a href="/upgrade" data-i18n="nav_upgrade"></a>
+      <a href="/profile" id="mobile-profile-link" style="display:none">👤 我的帳號</a>
       <div class="mobile-lang-row">
         <span>🌐</span>
         <select id="langSwitcherMobile" aria-label="語言切換">
@@ -498,6 +502,20 @@ function init() {
   }
 
   applyTranslations(currentLang);
+
+  // Auth state → 顯示/隱藏帳號連結
+  onAuthStateChanged(auth, (user) => {
+    const desktopLink = document.getElementById('nav-profile-link');
+    const mobileLink = document.getElementById('mobile-profile-link');
+    if (desktopLink) {
+      desktopLink.textContent = user ? `👤 ${user.displayName || '我的帳號'}` : '登入';
+      desktopLink.style.display = 'inline';
+    }
+    if (mobileLink) {
+      mobileLink.textContent = user ? `👤 ${user.displayName || '我的帳號'}` : '登入';
+      mobileLink.style.display = 'block';
+    }
+  });
 
   // 延遲初始化視覺效果，確保 DOM 就緒
   requestAnimationFrame(() => {
