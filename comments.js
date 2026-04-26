@@ -1,3 +1,4 @@
+import './nav.js';
 import { auth, db, signInWithGoogle, signInWithApple } from './auth.js';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
@@ -116,7 +117,6 @@ function render() {
 
   bindEvents();
   subscribeComments();
-  injectNavProfileLink();
 }
 
 // ─────────────────────────────────────────
@@ -251,24 +251,6 @@ function subscribeComments() {
       });
     });
   });
-}
-
-// ─────────────────────────────────────────
-// 在 shared-nav 加入帳號連結
-// ─────────────────────────────────────────
-function injectNavProfileLink() {
-  const navRight = document.querySelector('.shared-nav-right');
-  if (!navRight || navRight.querySelector('.nav-profile-link')) return;
-
-  const link = document.createElement('a');
-  link.className = 'shared-nav-link nav-profile-link';
-  link.href = '/profile';
-  link.textContent = currentUser ? '👤 我的帳號' : '登入';
-
-  // Insert before the CTA button
-  const cta = navRight.querySelector('.shared-nav-cta');
-  if (cta) navRight.insertBefore(link, cta);
-  else navRight.appendChild(link);
 }
 
 // ─────────────────────────────────────────
