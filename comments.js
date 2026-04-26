@@ -64,6 +64,8 @@ function timeAgo(ts) {
 // ─────────────────────────────────────────
 let currentUser = null;
 let unsubscribeComments = null;
+let lastCommentTime = 0;
+const COMMENT_COOLDOWN_MS = 10_000; // 10 秒冷卻，防洪水攻擊
 
 // ─────────────────────────────────────────
 // 渲染整個留言區塊
@@ -130,6 +132,17 @@ function esc(str) {
     .replace(/"/g, '&quot;');
 }
 
+// 只接受 https:// 圖片 URL，防止 javascript: / data: 協議 XSS
+function safeImgUrl(url) {
+  if (!url) return '';
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' ? url : '';
+  } catch {
+    return '';
+  }
+}
+
 // ─────────────────────────────────────────
 // 綁定事件
 // ─────────────────────────────────────────
@@ -175,6 +188,12 @@ function bindEvents() {
       errEl.style.display = 'block';
       return;
     }
+    const remaining = Math.ceil((COMMENT_COOLDOWN_MS - (Date.now() - lastCommentTime)) / 1000);
+    if (remaining > 0) {
+      errEl.textContent = `請等待 ${remaining} 秒再發表留言。`;
+      errEl.style.display = 'block';
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = t.submitting;
@@ -187,6 +206,7 @@ function bindEvents() {
         text,
         createdAt: serverTimestamp(),
       });
+      lastCommentTime = Date.now();
       input.value = '';
       charEl.textContent = '0 / 500';
     } catch (err) {
@@ -224,9 +244,10 @@ function subscribeComments() {
     listEl.innerHTML = snap.docs.map(d => {
       const c = d.data();
       const isOwn = currentUser && c.uid === currentUser.uid;
+      const avatarSrc = safeImgUrl(c.photoURL) || '/logo.png';
       return `
         <div class="comment-item" data-id="${d.id}">
-          <img class="comment-avatar" src="${esc(c.photoURL || '')}" alt="" onerror="this.src='/logo.png'" />
+          <img class="comment-avatar" src="${esc(avatarSrc)}" alt="" />
           <div class="comment-body">
             <div class="comment-header">
               <strong class="comment-name">${esc(c.displayName)}</strong>
