@@ -27,6 +27,7 @@ export default defineConfig({
         blogP6AssessmentExamTips: resolve(__dirname, 'blog/p6-assessment-exam-tips-2026.html'),
         blogPrimaryOnePlacementResults: resolve(__dirname, 'blog/primary-one-placement-results-2026.html'),
         blogHkAiEducationBlueprint: resolve(__dirname, 'blog/hk-ai-education-blueprint-2026.html'),
+        blogEnglishPhonicsHkStudents: resolve(__dirname, 'blog/english-phonics-hk-students.html'),
         profile: resolve(__dirname, 'profile.html'),
       },
     },
