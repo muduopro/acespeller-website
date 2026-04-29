@@ -29,6 +29,7 @@ export default defineConfig({
         blogHkAiEducationBlueprint: resolve(__dirname, 'blog/hk-ai-education-blueprint-2026.html'),
         blogEnglishPhonicsHkStudents: resolve(__dirname, 'blog/english-phonics-hk-students.html'),
         profile: resolve(__dirname, 'profile.html'),
+        blogPrivateTutoringGuide: resolve(__dirname, 'blog/hk-private-tutoring-guide-2026.html'),
       },
     },
   },
