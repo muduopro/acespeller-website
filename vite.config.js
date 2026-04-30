@@ -30,6 +30,7 @@ export default defineConfig({
         blogEnglishPhonicsHkStudents: resolve(__dirname, 'blog/english-phonics-hk-students.html'),
         profile: resolve(__dirname, 'profile.html'),
         blogPrivateTutoringGuide: resolve(__dirname, 'blog/hk-private-tutoring-guide-2026.html'),
+        blogAiToolsStudentComparison: resolve(__dirname, 'blog/ai-tools-student-comparison-2026.html'),
       },
     },
   },
