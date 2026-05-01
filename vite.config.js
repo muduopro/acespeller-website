@@ -31,6 +31,7 @@ export default defineConfig({
         profile: resolve(__dirname, 'profile.html'),
         blogPrivateTutoringGuide: resolve(__dirname, 'blog/hk-private-tutoring-guide-2026.html'),
         blogAiToolsStudentComparison: resolve(__dirname, 'blog/ai-tools-student-comparison-2026.html'),
+        blogGoodnotesVsNotability: resolve(__dirname, 'blog/goodnotes-vs-notability-hk-students-2026.html'),
       },
     },
   },
