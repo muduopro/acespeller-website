@@ -342,6 +342,40 @@ function renderApp() {
       </div>
     </section>
 
+    <!-- ===== BLOG HIGHLIGHTS ===== -->
+    <section class="blog-highlights-section section" aria-label="最新學習資源">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">📚 學習資源</div>
+          <h2 data-i18n="blog_section_title"></h2>
+          <p data-i18n="blog_section_desc"></p>
+        </div>
+        <div class="blog-highlights-grid">
+          <a href="/blog/dictation-practice-tips" class="blog-highlight-card">
+            <div class="blog-highlight-tag">默書技巧</div>
+            <h3>提升默書成績的 5 個高效方法</h3>
+            <p>配合 AceSpeller 的 AI 語音評估，幫助孩子建立正確學習習慣，輕鬆應對默書挑戰。</p>
+            <span class="blog-highlight-cta">閱讀文章 →</span>
+          </a>
+          <a href="/blog/primary-school-word-list" class="blog-highlight-card">
+            <div class="blog-highlight-tag">小學詞彙</div>
+            <h3>香港小學常用詞彙表完整整理</h3>
+            <p>教育局推薦詞彙 + 各年級高頻考點，配合 AceSpeller 默書表功能即學即練。</p>
+            <span class="blog-highlight-cta">閱讀文章 →</span>
+          </a>
+          <a href="/blog/ai-dictation-guide" class="blog-highlight-card">
+            <div class="blog-highlight-tag">AI 學習</div>
+            <h3>AI 如何革新香港學生的默書練習</h3>
+            <p>深度解析 AI 語音識別與即時反饋技術，讓家長了解科技如何輔助子女中文學習。</p>
+            <span class="blog-highlight-cta">閱讀文章 →</span>
+          </a>
+        </div>
+        <div style="text-align:center; margin-top: 2rem;">
+          <a href="/blog/" class="btn btn-outline" data-i18n="blog_view_all"></a>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== CTA BANNER ===== -->
     <section id="download" class="cta-section section" aria-label="下載呼籲">
       <div class="cta-glow" aria-hidden="true"></div>
