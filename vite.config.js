@@ -34,6 +34,7 @@ export default defineConfig({
         blogGoodnotesVsNotability: resolve(__dirname, 'blog/goodnotes-vs-notability-hk-students-2026.html'),
         blogAiHomeworkParentsGuide: resolve(__dirname, 'blog/ai-homework-parents-guide-2026.html'),
         blogAnkiVsQuizletHkStudents: resolve(__dirname, 'blog/anki-vs-quizlet-hk-students-2026.html'),
+        blogPomodoroStudyTimerAppsHk2026: resolve(__dirname, 'blog/pomodoro-study-timer-apps-hk-2026.html'),
       },
     },
   },
